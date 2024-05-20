@@ -17,13 +17,27 @@
         <relativePath/>
     </parent>
 
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
+
     <modules>
-<!--        <module>discovery_service</module>-->
-<!--        <module>gateway_service</module>-->
-<!--        <module>portal_service</module>-->
-<!--        <module>logist_service</module>-->
-<!--        <module>driver_service</module>-->
-<!--        <module>dwh_service</module>-->
+        <module>discovery_service</module>
+        <!--        <module>gateway_service</module>-->
+        <!--        <module>portal_service</module>-->
+        <!--        <module>logist_service</module>-->
+        <!--        <module>driver_service</module>-->
+        <!--        <module>dwh_service</module>-->
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 
 </project>
