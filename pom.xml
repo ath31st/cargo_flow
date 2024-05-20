@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.gnivc</groupId>
+    <artifactId>cargo-flow</artifactId>
+    <version>0.1.0</version>
+    <description>transport automation system</description>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
+    <modules>
+<!--        <module>discovery_service</module>-->
+<!--        <module>gateway_service</module>-->
+<!--        <module>portal_service</module>-->
+<!--        <module>logist_service</module>-->
+<!--        <module>driver_service</module>-->
+<!--        <module>dwh_service</module>-->
+    </modules>
+
+</project>
