@@ -75,8 +75,23 @@ services:
     networks:
       - test_network
 
+  postgres-container:
+    image: postgres:15.5
+    container_name: postgres-container
+    ports:
+      - "5432:5432"
+    command: -p 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cargo_flow_db
+    restart: on-failure
+    volumes:
+      - "database:/var/lib/postgresql/data"
+
 networks:
   test_network:
 
 volumes:
+  database:
   minio:
