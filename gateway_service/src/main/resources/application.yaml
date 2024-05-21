@@ -1,3 +1,41 @@
 spring:
   application:
     name: gateway_service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+  cloud:
+    gateway:
+      routes:
+        - id: auth
+          uri: ${keycloak.auth-server-url}
+          predicates:
+            - Path=/openid-connect/**
+          filters:
+            - RewritePath=/openid-connect,/realms/${keycloak.realm}/protocol/openid-connect
+
+        - id: external-auth
+          uri: ${keycloak.external.auth-server-url}
+          predicates:
+            - Path=/api/external/openid-connect/**
+          filters:
+            - RewritePath=/api/external/openid-connect,/realms/${keycloak.external.realm}/protocol/openid-connect
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_URL}
+  realm: ${KEYCLOAK_REALM}
+  username: ${KEYCLOAK_ADMIN_USERNAME}
+  password: ${KEYCLOAK_ADMIN_PASSWORD}
+  auth-path: /realms/${keycloak.realm}/protocol/openid-connect/token
+  external:
+    auth-server-url: ${keycloak.auth-server-url}
+    realm: external
