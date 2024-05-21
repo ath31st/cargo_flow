@@ -14,6 +14,8 @@ public class BeanConfig {
   private String serverUrl;
   @Value("${keycloak.realm}")
   private String realm;
+  @Value("${keycloak.client-id}")
+  private String clientId;
   @Value("${keycloak.password}")
   private String password;
   @Value("${keycloak.username}")
@@ -27,7 +29,7 @@ public class BeanConfig {
         .grantType(OAuth2Constants.PASSWORD)
         .username(username)
         .password(password)
-        .clientId("gateway-service")
+        .clientId(clientId)
         .build();
   }
 
