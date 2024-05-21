@@ -34,7 +34,7 @@ services:
       - '5672:5672'
 
   zookeeper:
-    image: wurstmeister/zookeeper:3.4.6
+    image: wurstmeister/zookeeper:latest
     hostname: zookeeper
     container_name: ern_zookeeper
     restart: always
@@ -65,6 +65,13 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - test_network
+
+  discovery-service:
+    build: ./discovery_service
+    ports:
+      - "8761:8761"
     networks:
       - test_network
 
