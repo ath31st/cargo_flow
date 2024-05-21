@@ -4,10 +4,13 @@ server:
 spring:
   application:
     name: gateway_service
+  main:
+    allow-bean-definition-overriding: true
   security:
     oauth2:
       resourceserver:
         jwt:
+          issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
           jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
   cloud:
     gateway:
@@ -26,6 +29,13 @@ spring:
           filters:
             - RewritePath=/api/external/openid-connect,/realms/${keycloak.external.realm}/protocol/openid-connect
 
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: DEBUG
+
 eureka:
   client:
     serviceUrl:
@@ -37,6 +47,7 @@ keycloak:
   auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080/auth}
   realm: ${KEYCLOAK_REALM:cargo-flow}
   client-id: ${KEYCLOAK_CLIENT_ID:gateway-service}
+  principle-attribute: preferred_username
   username: ${KEYCLOAK_ADMIN_USERNAME:admin}
   password: ${KEYCLOAK_ADMIN_PASSWORD:qwe123}
   auth-path: /realms/${keycloak.realm}/protocol/openid-connect/token
