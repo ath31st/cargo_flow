@@ -1,3 +1,6 @@
+server:
+  port: 8090
+
 spring:
   application:
     name: gateway_service
@@ -31,10 +34,10 @@ eureka:
     preferIpAddress: true
 
 keycloak:
-  auth-server-url: ${KEYCLOAK_URL}
-  realm: ${KEYCLOAK_REALM}
-  username: ${KEYCLOAK_ADMIN_USERNAME}
-  password: ${KEYCLOAK_ADMIN_PASSWORD}
+  auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080/auth}
+  realm: ${KEYCLOAK_REALM:cargo-flow}
+  username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+  password: ${KEYCLOAK_ADMIN_PASSWORD:qwe123}
   auth-path: /realms/${keycloak.realm}/protocol/openid-connect/token
   external:
     auth-server-url: ${keycloak.auth-server-url}
