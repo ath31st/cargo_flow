@@ -7,6 +7,7 @@ import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,11 +16,14 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class BeanConfig {
   @Value("${keycloak.auth-server-url}")
   private String serverUrl;
+  @Value("${keycloak.auth-path}")
+  private String authPath;
   @Value("${keycloak.realm}")
   private String realm;
   @Value("${keycloak.client-id}")
@@ -69,5 +73,11 @@ public class BeanConfig {
     });
 
     return converter;
+  }
+
+  @Bean
+  @LoadBalanced
+  public WebClient.Builder loadBalancedWebClientBuilder() {
+    return WebClient.builder();
   }
 }
