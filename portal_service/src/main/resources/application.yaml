@@ -15,8 +15,6 @@ eureka:
 keycloak:
   auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080}
   realm: ${KEYCLOAK_REALM:cargo-flow}
-  client-id: ${KEYCLOAK_CLIENT_ID:gateway-service}
-  principle-attribute: preferred_username
+  client-id: ${KEYCLOAK_CLIENT_ID:portal-service}
   username: ${KEYCLOAK_ADMIN_USERNAME:admin}
   password: ${KEYCLOAK_ADMIN_PASSWORD:qwe123}
-  auth-path: /realms/${keycloak.realm}/protocol/openid-connect/token
