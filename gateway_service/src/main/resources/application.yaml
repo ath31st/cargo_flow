@@ -44,7 +44,7 @@ eureka:
     preferIpAddress: true
 
 keycloak:
-  auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080/auth}
+  auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080}
   realm: ${KEYCLOAK_REALM:cargo-flow}
   client-id: ${KEYCLOAK_CLIENT_ID:gateway-service}
   principle-attribute: preferred_username
