@@ -1,4 +1,4 @@
-package ru.gnivc.gateway.service;
+package ru.gnivc.portal.service;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.gnivc.gateway.dto.UserRequestDto;
+import ru.gnivc.portal.dto.UserRegisterDto;
 
 @Service
 @RequiredArgsConstructor
@@ -24,17 +24,17 @@ public class KeyCloakService {
   @Value("${keycloak.realm}")
   private String realm;
 
-  public void addUser(UserRequestDto dto) {
-    String username = dto.getUsername();
-    CredentialRepresentation credential = createPasswordCredentials(dto.getPassword());
-    UserRepresentation user = new UserRepresentation();
-    user.setUsername(username);
-    user.setCredentials(Collections.singletonList(credential));
-    user.setEnabled(true);
-    UsersResource usersResource = getUsersResource();
-    usersResource.create(user);
-    addRealmRoleToUser(username, dto.getRole());
-  }
+//  public void addUser(UserRegisterDto dto) {
+//    String username = dto.getUsername();
+//    CredentialRepresentation credential = createPasswordCredentials(dto.getPassword());
+//    UserRepresentation user = new UserRepresentation();
+//    user.setUsername(username);
+//    user.setCredentials(Collections.singletonList(credential));
+//    user.setEnabled(true);
+//    UsersResource usersResource = getUsersResource();
+//    usersResource.create(user);
+//    addRealmRoleToUser(username, dto.getRole());
+//  }
 
   private void addRealmRoleToUser(String userName, String roleName) {
     RealmResource realmResource = keycloak.realm(realm);
