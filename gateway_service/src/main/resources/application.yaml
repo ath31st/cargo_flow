@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: gateway_service
+    name: gateway
   main:
     allow-bean-definition-overriding: true
   security:
@@ -28,6 +28,11 @@ spring:
             - Path=/api/external/openid-connect/**
           filters:
             - RewritePath=/api/external/openid-connect,/realms/${keycloak.external.realm}/protocol/openid-connect
+
+        - id: portal
+          uri: lb://portal
+          predicates:
+            - Path=/portal/**
 
 logging:
   level:
