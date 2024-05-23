@@ -55,11 +55,9 @@ public class KeycloakService {
 
   private static String generatePassword() {
     return new PasswordGenerator.Builder()
-        .digits(1)
         .lower(1)
         .upper(1)
-        .punctuation().custom("-._")
-        .generate(8);
+        .generate(6);
   }
 
   public void addRealmRoleToUser(String username, String roleName) {
