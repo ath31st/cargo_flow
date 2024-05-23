@@ -1,6 +1,6 @@
 package ru.gnivc.portal.dto;
 
-public record UserRegisterDto(
+public record IndividualRegisterReq(
     String firstName,
     String lastName,
     String email) {
