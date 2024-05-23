@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RoleMappingResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -39,17 +37,16 @@ public class KeycloakService {
   public void registerIndividual(IndividualRegisterReq req) {
     final String randomPassword = generatePassword();
 
-    String username = req.email();
+    String username = req.email().split("@")[0];
     CredentialRepresentation credential = createPasswordCredentials(randomPassword);
     UserRepresentation user = new UserRepresentation();
     user.setUsername(username);
-    user.setEmail(username);
+    user.setEmail(req.email());
     user.setCredentials(Collections.singletonList(credential));
     user.setEnabled(true);
+    user.setEmailVerified(true);
 
-    UsersResource usersResource = getUsersResource();
-
-    try (Response response = usersResource.create(user)) {
+    try (Response response = getUsersResource().create(user)) {
       if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
         addRealmRoleToUser(username, "REGISTRATOR");
       }
@@ -65,13 +62,21 @@ public class KeycloakService {
         .generate(8);
   }
 
-  private void addRealmRoleToUser(String userName, String roleName) {
-    RealmResource realmResource = keycloak.realm(realm);
-    List<UserRepresentation> users = realmResource.users().search(userName);
-    UserResource userResource = realmResource.users().get(users.get(0).getId());
-    RoleRepresentation role = realmResource.roles().get(roleName).toRepresentation();
-    RoleMappingResource roleMappingResource = userResource.roles();
-    roleMappingResource.realmLevel().add(Collections.singletonList(role));
+  public void addRealmRoleToUser(String username, String roleName) {
+    List<UserRepresentation> users = getUsersResource().search(username);
+
+    UserRepresentation user = users.get(0);
+    String userId = user.getId();
+
+    RoleRepresentation role = keycloak.realm(realm)
+        .roles()
+        .get(roleName)
+        .toRepresentation();
+
+    UserResource userResource = getUsersResource().get(userId);
+    userResource.roles()
+        .realmLevel()
+        .add(Collections.singletonList(role));
   }
 
   private UsersResource getUsersResource() {
