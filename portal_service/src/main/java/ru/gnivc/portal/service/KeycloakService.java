@@ -13,16 +13,25 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.gnivc.portal.dto.UserRegisterDto;
 
 @Service
 @RequiredArgsConstructor
-public class KeyCloakService {
+public class KeycloakService {
 
   private final Keycloak keycloak;
 
   @Value("${keycloak.realm}")
   private String realm;
+
+  public List<String> getRealmRoles() {
+    return keycloak
+        .realm(realm)
+        .roles()
+        .list()
+        .stream()
+        .map(RoleRepresentation::getName)
+        .toList();
+  }
 
 //  public void addUser(UserRegisterDto dto) {
 //    String username = dto.getUsername();
