@@ -1,5 +1,6 @@
 package ru.gnivc.portal.service;
 
+import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.gnivc.portal.dto.IndividualRegisterReq;
+import ru.gnivc.portal.util.PasswordGenerator;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +36,34 @@ public class KeycloakService {
         .toList();
   }
 
-//  public void addUser(UserRegisterDto dto) {
-//    String username = dto.getUsername();
-//    CredentialRepresentation credential = createPasswordCredentials(dto.getPassword());
-//    UserRepresentation user = new UserRepresentation();
-//    user.setUsername(username);
-//    user.setCredentials(Collections.singletonList(credential));
-//    user.setEnabled(true);
-//    UsersResource usersResource = getUsersResource();
-//    usersResource.create(user);
-//    addRealmRoleToUser(username, dto.getRole());
-//  }
+  public void registerIndividual(IndividualRegisterReq req) {
+    final String randomPassword = generatePassword();
+
+    String username = req.email();
+    CredentialRepresentation credential = createPasswordCredentials(randomPassword);
+    UserRepresentation user = new UserRepresentation();
+    user.setUsername(username);
+    user.setEmail(username);
+    user.setCredentials(Collections.singletonList(credential));
+    user.setEnabled(true);
+
+    UsersResource usersResource = getUsersResource();
+
+    try (Response response = usersResource.create(user)) {
+      if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+        addRealmRoleToUser(username, "REGISTRATOR");
+      }
+    }
+  }
+
+  private static String generatePassword() {
+    return new PasswordGenerator.Builder()
+        .digits(1)
+        .lower(1)
+        .upper(1)
+        .punctuation().custom("-._")
+        .generate(8);
+  }
 
   private void addRealmRoleToUser(String userName, String roleName) {
     RealmResource realmResource = keycloak.realm(realm);
