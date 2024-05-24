@@ -41,6 +41,8 @@ public class KeycloakService {
     CredentialRepresentation credential = createPasswordCredentials(randomPassword);
     UserRepresentation user = new UserRepresentation();
     user.setUsername(username);
+    user.setFirstName(req.firstName());
+    user.setLastName(req.lastName());
     user.setEmail(req.email());
     user.setCredentials(Collections.singletonList(credential));
     user.setEnabled(true);
