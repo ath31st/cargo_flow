@@ -28,7 +28,7 @@
         <module>discovery_service</module>
         <module>gateway_service</module>
         <module>portal_service</module>
-        <!--        <module>logist_service</module>-->
+        <module>logist_service</module>
         <!--        <module>driver_service</module>-->
         <!--        <module>dwh_service</module>-->
     </modules>
