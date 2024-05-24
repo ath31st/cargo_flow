@@ -1,15 +1,17 @@
-spring:
-  application:
-    name: discovery_service
-
 server:
   port: ${EUREKA_SERVER_PORT:8761}
 
+spring:
+  application:
+    name: discovery
+
 eureka:
+  instance:
+    hostname: localhost
   client:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://localhost:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     enable-self-preservation: false
