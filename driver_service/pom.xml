@@ -11,17 +11,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>ru.gnivc</groupId>
     <artifactId>driver</artifactId>
     <version>0.1.0</version>
     <name>driver_service</name>
     <description>driver service</description>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
