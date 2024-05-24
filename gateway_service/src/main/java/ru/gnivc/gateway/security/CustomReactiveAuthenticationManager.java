@@ -12,7 +12,6 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -31,29 +30,25 @@ public class CustomReactiveAuthenticationManager implements ReactiveAuthenticati
   @Override
   public Mono<Authentication> authenticate(Authentication authentication) {
     BearerTokenAuthenticationToken token = (BearerTokenAuthenticationToken) authentication;
-    try {
-      return jwtDecoder.decode(token.getToken())
-          .flatMap(jwt -> {
-            String userId = jwt.getSubject();
+    return jwtDecoder.decode(token.getToken())
+        .flatMap(jwt -> {
+          String userId = jwt.getSubject();
 
-            UserResource userResource = keycloak.realm(realm).users().get(userId);
-            final List<RoleRepresentation> roleRepresentations = userResource.roles()
-                .realmLevel()
-                .listAll();
+          UserResource userResource = keycloak.realm(realm).users().get(userId);
+          final List<RoleRepresentation> roleRepresentations = userResource.roles()
+              .realmLevel()
+              .listAll();
 
-            List<GrantedAuthority> authorities = roleRepresentations.stream()
-                .map(rr -> (GrantedAuthority) new SimpleGrantedAuthority(rr.getName()))
-                .toList();
+          List<GrantedAuthority> authorities = roleRepresentations.stream()
+              .map(rr -> (GrantedAuthority) new SimpleGrantedAuthority(rr.getName()))
+              .toList();
 
-            UserRepresentation userRepresentation = userResource.toRepresentation();
-            CustomUserDetails userDetails = new CustomUserDetails(
-                userRepresentation.getUsername(), "", authorities);
+          UserRepresentation userRepresentation = userResource.toRepresentation();
+          CustomUserDetails userDetails = new CustomUserDetails(
+              userRepresentation.getUsername(), "", authorities);
 
-            return Mono.just(new JwtAuthenticationToken(jwt, authorities, userDetails.getUsername()));
-          });
-    } catch (JwtException e) {
-      log.error(e.getMessage());
-      return Mono.error(e);
-    }
+          return Mono.just((Authentication) new JwtAuthenticationToken(
+              jwt, authorities, userDetails.getUsername()));
+        });
   }
 }
