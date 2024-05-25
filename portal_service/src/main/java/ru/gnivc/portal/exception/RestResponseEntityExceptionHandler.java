@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(UserServiceException.class)
-  protected ResponseEntity<Response> handleKeycloakServiceException(UserServiceException e) {
+  protected ResponseEntity<Response> handleUserServiceException(UserServiceException e) {
     return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 

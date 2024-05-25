@@ -4,6 +4,19 @@ server:
 spring:
   application:
     name: portal
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+          jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: DEBUG
 
 eureka:
   client:
