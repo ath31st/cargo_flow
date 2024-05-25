@@ -4,19 +4,22 @@ server:
 spring:
   application:
     name: portal
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
           jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
 
-logging:
-  level:
-    org:
-      springframework:
-        security:
-          web: DEBUG
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:cargo_flow_db}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driverClassName: org.postgresql.Driver
+
+  flyway:
+    clean-on-validation-error: true
+    clean-disabled: false
 
 eureka:
   client:
@@ -31,3 +34,10 @@ keycloak:
   client-id: ${KEYCLOAK_CLIENT_ID:portal-service}
   username: ${KEYCLOAK_ADMIN_USERNAME:admin}
   password: ${KEYCLOAK_ADMIN_PASSWORD:qwe123}
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: DEBUG
