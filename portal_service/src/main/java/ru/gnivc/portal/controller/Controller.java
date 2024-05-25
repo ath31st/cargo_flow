@@ -24,8 +24,8 @@ public class Controller {
   }
 
   @PostMapping("/register-individual")
-  public ResponseEntity<HttpStatus> registerIndividual(@RequestBody IndividualRegisterReq req) {
-    keycloakService.registerIndividual(req);
-    return ResponseEntity.ok().body(HttpStatus.CREATED);
+  public ResponseEntity<String> registerIndividual(@RequestBody IndividualRegisterReq req) {
+    String tempPassword = keycloakService.registerIndividual(req);
+    return new ResponseEntity<>(tempPassword, HttpStatus.CREATED);
   }
 }

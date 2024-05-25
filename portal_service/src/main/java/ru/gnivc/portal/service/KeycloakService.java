@@ -34,7 +34,7 @@ public class KeycloakService {
         .toList();
   }
 
-  public void registerIndividual(IndividualRegisterReq req) {
+  public String registerIndividual(IndividualRegisterReq req) {
     final String randomPassword = generatePassword();
 
     String username = req.email().split("@")[0];
@@ -52,7 +52,11 @@ public class KeycloakService {
       if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
         addRealmRoleToUser(username, "REGISTRATOR");
       }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+
+    return randomPassword;
   }
 
   private static String generatePassword() {
