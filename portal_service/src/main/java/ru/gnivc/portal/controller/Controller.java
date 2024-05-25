@@ -25,6 +25,7 @@ public class Controller {
 
   @PostMapping("/register-individual")
   public ResponseEntity<String> registerIndividual(@RequestBody IndividualRegisterReq req) {
+    keycloakService.checkExistsUserByEmail(req.email());
     String tempPassword = keycloakService.registerIndividual(req);
     return new ResponseEntity<>(tempPassword, HttpStatus.CREATED);
   }

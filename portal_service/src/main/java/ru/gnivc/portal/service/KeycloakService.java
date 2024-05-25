@@ -11,8 +11,10 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.gnivc.portal.dto.IndividualRegisterReq;
+import ru.gnivc.portal.exception.KeycloakServiceException;
 import ru.gnivc.portal.util.PasswordGenerator;
 
 @Service
@@ -93,5 +95,16 @@ public class KeycloakService {
     passwordCredentials.setType(CredentialRepresentation.PASSWORD);
     passwordCredentials.setValue(password);
     return passwordCredentials;
+  }
+
+  public void checkExistsUserByEmail(String email) {
+    boolean exact = true;
+    List<UserRepresentation> users = keycloak.realm(realm)
+        .users()
+        .searchByEmail(email.toLowerCase().trim(), exact);
+    if (!users.isEmpty()) {
+      throw new KeycloakServiceException(
+          HttpStatus.CONFLICT, "User with email " + email + " already exists");
+    }
   }
 }
