@@ -14,8 +14,8 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class KeycloakServiceException extends AbstractException {
-  public KeycloakServiceException(HttpStatus status, String errorMessage) {
+public class UserServiceException extends AbstractException {
+  public UserServiceException(HttpStatus status, String errorMessage) {
     super(status, errorMessage);
   }
 }

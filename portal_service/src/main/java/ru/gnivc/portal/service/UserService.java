@@ -16,12 +16,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.gnivc.portal.dto.IndividualRegisterReq;
-import ru.gnivc.portal.exception.KeycloakServiceException;
+import ru.gnivc.portal.exception.UserServiceException;
 import ru.gnivc.portal.util.PasswordGenerator;
 
 @Service
 @RequiredArgsConstructor
-public class KeycloakService {
+public class UserService {
 
   private final Keycloak keycloak;
 
@@ -57,7 +57,7 @@ public class KeycloakService {
         addRealmRoleToUser(username, REGISTRATOR.name());
       }
     } catch (Exception e) {
-      throw new KeycloakServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
+      throw new UserServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     return randomPassword;
@@ -105,7 +105,7 @@ public class KeycloakService {
         .users()
         .searchByEmail(email.toLowerCase().trim(), exact);
     if (!users.isEmpty()) {
-      throw new KeycloakServiceException(
+      throw new UserServiceException(
           HttpStatus.CONFLICT, "User with email " + email + " already exists");
     }
   }
