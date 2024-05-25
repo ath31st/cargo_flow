@@ -1,5 +1,7 @@
 package ru.gnivc.portal.service;
 
+import static ru.gnivc.portal.util.Roles.REGISTRATOR;
+
 import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
@@ -52,10 +54,10 @@ public class KeycloakService {
 
     try (Response response = getUsersResource().create(user)) {
       if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
-        addRealmRoleToUser(username, "REGISTRATOR");
+        addRealmRoleToUser(username, REGISTRATOR.name());
       }
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new KeycloakServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     return randomPassword;
