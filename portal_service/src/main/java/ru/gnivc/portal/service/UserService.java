@@ -3,6 +3,7 @@ package ru.gnivc.portal.service;
 import static ru.gnivc.portal.util.Roles.REGISTRATOR;
 
 import jakarta.ws.rs.core.Response;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -63,13 +64,6 @@ public class UserService {
     return randomPassword;
   }
 
-  private static String generatePassword() {
-    return new PasswordGenerator.Builder()
-        .lower(1)
-        .upper(1)
-        .generate(6);
-  }
-
   public void addRealmRoleToUser(String username, String roleName) {
     List<UserRepresentation> users = getUsersResource().search(username);
 
@@ -87,8 +81,43 @@ public class UserService {
         .add(Collections.singletonList(role));
   }
 
+  public String changePassword(Principal principal, String email, String newPassword) {
+    if (newPassword == null || newPassword.isEmpty()) {
+      newPassword = generatePassword();
+    }
+
+    UserRepresentation user = getUserByEmail(email);
+    String userId = user.getId();
+
+    if (!userId.equals(principal.getName())) {
+      throw new UserServiceException(HttpStatus.UNAUTHORIZED,
+          "User with id " + userId + " not found");
+    }
+
+    CredentialRepresentation newCredentials = createPasswordCredentials(newPassword);
+    getUsersResource().get(userId).resetPassword(newCredentials);
+
+    return newPassword;
+  }
+
+
+  private static String generatePassword() {
+    return new PasswordGenerator.Builder()
+        .lower(1)
+        .upper(1)
+        .generate(6);
+  }
+
   private UsersResource getUsersResource() {
     return keycloak.realm(realm).users();
+  }
+
+  private UserRepresentation getUserByEmail(String email) {
+    List<UserRepresentation> users = getUsersResource().searchByEmail(email, true);
+    if (users.isEmpty()) {
+      throw new UserServiceException(HttpStatus.NOT_FOUND, "User with email " + email + " not found");
+    }
+    return users.get(0);
   }
 
   private static CredentialRepresentation createPasswordCredentials(String password) {
@@ -101,8 +130,7 @@ public class UserService {
 
   public void checkExistsUserByEmail(String email) {
     boolean exact = true;
-    List<UserRepresentation> users = keycloak.realm(realm)
-        .users()
+    List<UserRepresentation> users = getUsersResource()
         .searchByEmail(email.toLowerCase().trim(), exact);
     if (!users.isEmpty()) {
       throw new UserServiceException(
