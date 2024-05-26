@@ -13,8 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class BeanConfig {
   @Value("${keycloak.auth-server-url}")
   private String serverUrl;
-  @Value("${keycloak.auth-path}")
-  private String authPath;
   @Value("${keycloak.realm}")
   private String realm;
   @Value("${keycloak.client-id}")
@@ -23,20 +21,19 @@ public class BeanConfig {
   private String password;
   @Value("${keycloak.username}")
   private String username;
-  @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
-  private String issuerUri;
-  @Value("${keycloak.principle-attribute}")
-  private String principleAttribute;
+  @Value("${keycloak.client-secret}")
+  private String secret;
 
   @Bean
   public Keycloak keycloak() {
     return KeycloakBuilder.builder()
         .serverUrl(serverUrl)
-        .realm("master")
+        .realm(realm)
         .grantType(OAuth2Constants.PASSWORD)
         .username(username)
         .password(password)
-        .clientId("admin-cli")
+        .clientId(clientId)
+        .clientSecret(secret)
         .build();
   }
 

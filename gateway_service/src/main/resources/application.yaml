@@ -22,13 +22,6 @@ spring:
           filters:
             - RewritePath=/openid-connect,/realms/${keycloak.realm}/protocol/openid-connect
 
-        - id: external-auth
-          uri: ${keycloak.external.auth-server-url}
-          predicates:
-            - Path=/api/external/openid-connect/**
-          filters:
-            - RewritePath=/api/external/openid-connect,/realms/${keycloak.external.realm}/protocol/openid-connect
-
         - id: portal
           uri: lb://portal
           predicates:
@@ -52,10 +45,6 @@ keycloak:
   auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080}
   realm: ${KEYCLOAK_REALM:cargo-flow}
   client-id: ${KEYCLOAK_CLIENT_ID:gateway-service}
-  principle-attribute: preferred_username
-  username: ${KEYCLOAK_ADMIN_USERNAME:admin}
-  password: ${KEYCLOAK_ADMIN_PASSWORD:qwe123}
-  auth-path: /realms/${keycloak.realm}/protocol/openid-connect/token
-  external:
-    auth-server-url: ${keycloak.auth-server-url}
-    realm: external
+  username: ${KEYCLOAK_ADMIN_USERNAME:realm_admin}
+  password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:l71sOGPUXEN5nZQfQXyouUMteFgWT31e}

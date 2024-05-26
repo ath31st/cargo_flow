@@ -32,9 +32,9 @@ keycloak:
   auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080}
   realm: ${KEYCLOAK_REALM:cargo-flow}
   client-id: ${KEYCLOAK_CLIENT_ID:portal-service}
-  username: ${KEYCLOAK_ADMIN_USERNAME:portal_admin}
+  username: ${KEYCLOAK_ADMIN_USERNAME:realm_admin}
   password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
-  client-secret: mN4TFaZyc9Ev2eUQAu5E0iCBGUc4J2QK
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:mN4TFaZyc9Ev2eUQAu5E0iCBGUc4J2QK}
 
 logging:
   level:
