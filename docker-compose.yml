@@ -19,7 +19,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: qwe123
     volumes:
-      - ./keycloak/realms/autobahn_v1.json:/opt/keycloak/data/import/realm.json
+      - ./keycloak/realms/cargo-flow-realm.json:/opt/keycloak/data/import/realm.json
     ports:
       - "8080:8080"
     command:
