@@ -25,8 +25,10 @@ public class SecurityConfig {
         .authorizeExchange(req -> {
           req.pathMatchers("/openid-connect/**").permitAll();
 
-          req.pathMatchers("/portal/v1/roles").hasAuthority(Roles.REGISTRATOR.name());
-          req.pathMatchers("/portal/v1/register-individual").permitAll();
+          req.pathMatchers("/portal/v1/users/roles").hasAuthority(Roles.REGISTRATOR.name());
+          req.pathMatchers("portal/v1/users/register-individual").permitAll();
+
+          req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(Roles.REGISTRATOR.name());
           req.anyExchange().authenticated();
         })
         .oauth2ResourceServer(oauth2 ->

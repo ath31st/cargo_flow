@@ -14,8 +14,8 @@ import ru.gnivc.portal.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/portal/v1")
-public class Controller {
+@RequestMapping("/portal/v1/users")
+public class UserController {
   private final UserService userService;
 
   @GetMapping("/roles")

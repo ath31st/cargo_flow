@@ -36,6 +36,10 @@ keycloak:
   password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
   client-secret: ${KEYCLOAK_CLIENT_SECRET:mN4TFaZyc9Ev2eUQAu5E0iCBGUc4J2QK}
 
+dadata:
+  api-key: Token b1fa8ce0d9fdf1b859639fb00bca8cecd24bd502
+  url: http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party
+
 logging:
   level:
     org:
