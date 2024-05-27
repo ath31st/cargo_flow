@@ -16,7 +16,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.gnivc.portal.dto.IndividualRegisterReq;
+import ru.gnivc.portal.dto.user.IndividualRegisterReq;
+import ru.gnivc.portal.dto.user.NewUserDataReq;
 import ru.gnivc.portal.exception.UserServiceException;
 import ru.gnivc.portal.util.PasswordGenerator;
 
@@ -81,17 +82,34 @@ public class UserService {
         .add(Collections.singletonList(role));
   }
 
+  public void changeData(Principal principal, NewUserDataReq req) {
+    UserResource userResource = getUsersResource().get(principal.getName());
+    UserRepresentation user = userResource.toRepresentation();
+
+    if (req.newFirstName() != null && !req.newFirstName().isEmpty()) {
+      user.setFirstName(req.newFirstName());
+    }
+    if (req.newLastName() != null && !req.newLastName().isEmpty()) {
+      user.setLastName(req.newLastName());
+    }
+    if (req.newEmail() != null && !req.newEmail().isEmpty()) {
+      user.setEmail(req.newEmail());
+    }
+
+    userResource.update(user);
+  }
+
   public String changePassword(Principal principal, String email, String newPassword) {
     if (newPassword == null || newPassword.isEmpty()) {
       newPassword = generatePassword();
     }
 
-    UserRepresentation user = getUserByEmail(email);
+    UserRepresentation user = getUserRepByEmail(email);
     String userId = user.getId();
 
     if (!userId.equals(principal.getName())) {
-      throw new UserServiceException(HttpStatus.UNAUTHORIZED,
-          "User with id " + userId + " not found");
+      throw new UserServiceException(HttpStatus.BAD_REQUEST,
+          "User with id " + userId + " mismatch with user founded by email");
     }
 
     CredentialRepresentation newCredentials = createPasswordCredentials(newPassword);
@@ -112,7 +130,7 @@ public class UserService {
     return keycloak.realm(realm).users();
   }
 
-  private UserRepresentation getUserByEmail(String email) {
+  private UserRepresentation getUserRepByEmail(String email) {
     List<UserRepresentation> users = getUsersResource().searchByEmail(email, true);
     if (users.isEmpty()) {
       throw new UserServiceException(HttpStatus.NOT_FOUND, "User with email " + email + " not found");
