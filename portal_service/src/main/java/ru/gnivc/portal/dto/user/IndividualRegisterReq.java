@@ -1,7 +1,8 @@
-package ru.gnivc.portal.dto;
+package ru.gnivc.portal.dto.user;
 
 public record IndividualRegisterReq(
     String firstName,
     String lastName,
-    String email) {
+    String email
+) {
 }
