@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gnivc.portal.dto.user.IndividualRegisterReq;
 import ru.gnivc.portal.dto.user.NewUserDataReq;
+import ru.gnivc.portal.dto.user.NewUserPasswordReq;
 import ru.gnivc.portal.service.UserService;
 
 @RestController
@@ -41,8 +42,8 @@ public class UserController {
 
   @PostMapping("/change-password")
   public ResponseEntity<HttpStatus> changePassword(
-      Principal principal, @RequestParam String email, @RequestParam String newPassword) {
-    userService.changePassword(principal, email, newPassword);
+      Principal principal, @RequestBody NewUserPasswordReq req) {
+    userService.changePassword(principal, req.email(), req.newPassword());
     return ResponseEntity.ok().build();
   }
 
