@@ -21,8 +21,6 @@ public class BeanConfig {
   private String password;
   @Value("${keycloak.username}")
   private String username;
-  @Value("${keycloak.client-secret}")
-  private String secret;
 
   @Bean
   public Keycloak keycloak() {
@@ -33,7 +31,6 @@ public class BeanConfig {
         .username(username)
         .password(password)
         .clientId(clientId)
-        .clientSecret(secret)
         .build();
   }
 

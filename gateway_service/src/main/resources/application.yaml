@@ -47,4 +47,3 @@ keycloak:
   client-id: ${KEYCLOAK_CLIENT_ID:gateway-service}
   username: ${KEYCLOAK_ADMIN_USERNAME:realm_admin}
   password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
-  client-secret: ${KEYCLOAK_CLIENT_SECRET:l71sOGPUXEN5nZQfQXyouUMteFgWT31e}
