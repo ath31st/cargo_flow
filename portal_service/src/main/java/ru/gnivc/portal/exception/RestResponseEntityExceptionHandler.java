@@ -15,10 +15,13 @@ import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import javax.naming.AuthenticationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -54,6 +57,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         .status(HttpStatus.BAD_REQUEST)
         .build();
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({AccessDeniedException.class})
+  public ResponseEntity<Object> handleAccessDeniedException(Exception ex) {
+
+    Response response = Response.builder()
+        .timestamp(LocalDateTime.now().toString())
+        .error(ex.getMessage())
+        .status(HttpStatus.FORBIDDEN)
+        .build();
+
+    return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
   }
 
   private Response buildResponse(AbstractException e) {

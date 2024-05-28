@@ -103,17 +103,9 @@ public class UserService {
     userResource.update(user);
   }
 
-  public String changePassword(Principal principal, String email, String newPassword) {
+  public String changePassword(String userId, String newPassword) {
     if (newPassword == null || newPassword.isEmpty()) {
       newPassword = generatePassword();
-    }
-
-    UserRepresentation user = getUserRepByEmail(email);
-    String userId = user.getId();
-
-    if (!userId.equals(principal.getName())) {
-      throw new UserServiceException(HttpStatus.BAD_REQUEST,
-          "User with id " + userId + " mismatch with user founded by email");
     }
 
     CredentialRepresentation newCredentials = createPasswordCredentials(newPassword);
