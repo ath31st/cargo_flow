@@ -1,5 +1,6 @@
 package ru.gnivc.portal.service;
 
+import static ru.gnivc.portal.util.Roles.REALM_ADMIN;
 import static ru.gnivc.portal.util.Roles.REGISTRATOR;
 
 import jakarta.ws.rs.core.Response;
@@ -37,6 +38,9 @@ public class UserService {
         .list()
         .stream()
         .map(RoleRepresentation::getName)
+        .filter(r -> !r.equals(REGISTRATOR.name())
+            && !r.equals(REALM_ADMIN.name())
+            && r.equals(r.toUpperCase()))
         .toList();
   }
 
