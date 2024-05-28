@@ -44,6 +44,11 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>4.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>ru.gnivc.common</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

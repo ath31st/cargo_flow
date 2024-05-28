@@ -1,5 +1,7 @@
 package ru.gnivc.gateway.config;
 
+import static ru.gnivc.common.role.KeycloakRoles.REGISTRATOR;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +11,6 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 import ru.gnivc.gateway.security.CustomReactiveAuthenticationManager;
-import ru.gnivc.gateway.util.Roles;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -25,10 +26,10 @@ public class SecurityConfig {
         .authorizeExchange(req -> {
           req.pathMatchers("/openid-connect/**").permitAll();
 
-          req.pathMatchers("/portal/v1/users/roles").hasAuthority(Roles.REGISTRATOR.name());
+          req.pathMatchers("/portal/v1/users/roles").hasAuthority(REGISTRATOR.name());
           req.pathMatchers("portal/v1/users/register-individual").permitAll();
 
-          req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(Roles.REGISTRATOR.name());
+          req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(REGISTRATOR.name());
           req.anyExchange().authenticated();
         })
         .oauth2ResourceServer(oauth2 ->

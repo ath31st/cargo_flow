@@ -1,7 +1,7 @@
 package ru.gnivc.portal.service;
 
-import static ru.gnivc.portal.util.Roles.REALM_ADMIN;
-import static ru.gnivc.portal.util.Roles.REGISTRATOR;
+import static ru.gnivc.common.role.KeycloakRoles.REALM_ADMIN;
+import static ru.gnivc.common.role.KeycloakRoles.REGISTRATOR;
 
 import jakarta.ws.rs.core.Response;
 import java.security.Principal;
