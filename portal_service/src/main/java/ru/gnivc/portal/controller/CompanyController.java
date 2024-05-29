@@ -8,8 +8,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.gnivc.portal.dto.user.EmployeeRegisterReq;
 import ru.gnivc.portal.service.CompanyService;
 
 @RestController
@@ -32,5 +34,14 @@ public class CompanyController {
     companyService.registerCompany(companyInn, principal.getSubject());
 
     return ResponseEntity.ok().body(HttpStatus.CREATED);
+  }
+
+  @PreAuthorize("@permissionValidator.validateForRegisterEmployee(#principal, #companyId, #req.role())")
+  @PostMapping("/{companyId}/register-employee")
+  public ResponseEntity<String> registerEmployee(@AuthenticationPrincipal Jwt principal,
+                                                 @PathVariable Integer companyId,
+                                                 @RequestBody EmployeeRegisterReq req) {
+
+    return ResponseEntity.ok("TEST REGISTER EMPLOYEE");
   }
 }

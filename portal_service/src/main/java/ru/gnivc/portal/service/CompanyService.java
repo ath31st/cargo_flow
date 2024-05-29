@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gnivc.portal.dto.user.DadataCompany;
 import ru.gnivc.portal.entity.Company;
-import ru.gnivc.portal.exception.CompanyServiceException;
+import ru.gnivc.common.exception.CompanyServiceException;
 import ru.gnivc.portal.repository.CompanyRepository;
 
 @Slf4j
