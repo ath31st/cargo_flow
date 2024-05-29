@@ -8,14 +8,17 @@
  * limitations under the License.
  */
 
-package ru.gnivc.portal.exception;
+package ru.gnivc.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class CompanyServiceException extends AbstractException {
-  public CompanyServiceException(HttpStatus status, String errorMessage) {
-    super(status, errorMessage);
+public abstract class AbstractException extends RuntimeException {
+  private final HttpStatus status;
+
+  protected AbstractException(HttpStatus status, String errorMessage) {
+    super(errorMessage);
+    this.status = status;
   }
 }

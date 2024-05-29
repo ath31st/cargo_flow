@@ -1,4 +1,4 @@
-package ru.gnivc.portal.exception;
+package ru.gnivc.common.exception;
 
 import lombok.Builder;
 import lombok.Getter;
