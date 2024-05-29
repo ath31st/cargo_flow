@@ -1,5 +1,8 @@
 package ru.gnivc.common.role;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import lombok.Getter;
 
 @Getter
@@ -17,4 +20,11 @@ public enum KeycloakRealmRoles {
 
   private final int priority;
   private final String attributeName;
+
+  public static List<String> getAttributeNames() {
+    return Arrays.stream(KeycloakRealmRoles.values())
+        .filter(Objects::nonNull)
+        .map(KeycloakRealmRoles::getAttributeName)
+        .toList();
+  }
 }
