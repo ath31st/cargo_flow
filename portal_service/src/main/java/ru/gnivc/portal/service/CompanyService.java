@@ -2,6 +2,7 @@ package ru.gnivc.portal.service;
 
 import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 
+import com.netflix.discovery.shared.Pair;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -58,11 +59,17 @@ public class CompanyService {
   }
 
   public CompanyDto getCompanyInfo(String companyId) {
-    checkCompanyExists(companyId);
+    Company company = companyRepository.findById(Integer.parseInt(companyId))
+        .orElseThrow(() -> new CompanyServiceException(HttpStatus.NOT_FOUND, "Company not found"));
 
-    Company c = companyRepository.findById(Integer.parseInt(companyId)).get();
-    return new CompanyDto(c.getId(), c.getName(), c.getInn(), c.getInn(), c.getKpp(), c.getOgrn(), 0, 0);
+    Pair<Long, Long> pair = userService.getQuantityLogistsAndDrivers(companyId);
+    long logistCount = pair.first();
+    long driverCount = pair.second();
+
+    return new CompanyDto(company.getId(), company.getName(), company.getInn(),
+        company.getAddress(), company.getKpp(), company.getOgrn(), logistCount, driverCount);
   }
+
 
   public Page<CompanyShortDto> getCompanies(Pageable pageable) {
     return companyRepository.findAll(pageable)

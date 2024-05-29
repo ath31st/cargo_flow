@@ -1,8 +1,11 @@
 package ru.gnivc.portal.service;
 
+import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
+import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REALM_ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
+import com.netflix.discovery.shared.Pair;
 import jakarta.ws.rs.core.Response;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -231,6 +234,28 @@ public class UserService {
       throw new UserServiceException(
           HttpStatus.NOT_FOUND, "User with email " + req.email() + " not found");
     }
+  }
+
+  public Pair<Long, Long> getQuantityLogistsAndDrivers(String companyId) {
+    List<UserRepresentation> users = getUsersResource().list();
+
+    long logists = users.stream()
+        .filter(user -> hasRoleInCompany(user, LOGIST.getAttributeName(), companyId))
+        .count();
+
+    long drivers = users.stream()
+        .filter(user -> hasRoleInCompany(user, DRIVER.getAttributeName(), companyId))
+        .count();
+
+    return new Pair<>(logists, drivers);
+  }
+
+  private boolean hasRoleInCompany(UserRepresentation user, String roleName, String companyId) {
+    Map<String, List<String>> attributes = user.getAttributes();
+    if (attributes != null && attributes.containsKey(roleName)) {
+      return attributes.get(roleName).contains(companyId);
+    }
+    return false;
   }
 
   private void checkExistsEmployeeInCompany(String userId, String companyId) {

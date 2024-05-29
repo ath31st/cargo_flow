@@ -7,7 +7,7 @@ public record CompanyDto(
     String address,
     String kpp,
     String ogrn,
-    Integer quantityLogists,
-    Integer quantityDrivers
+    Long quantityLogists,
+    Long quantityDrivers
 ) {
 }
