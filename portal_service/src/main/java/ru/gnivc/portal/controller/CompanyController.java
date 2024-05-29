@@ -32,10 +32,10 @@ public class CompanyController {
 
   @PreAuthorize("@permissionValidator.validateForRegisterEmployee(#principal, #companyId, #req.role())")
   @PostMapping("/{companyId}/register-employee")
-  public ResponseEntity<String> registerEmployee(@AuthenticationPrincipal Jwt principal,
-                                                 @PathVariable Integer companyId,
-                                                 @RequestBody EmployeeRegisterReq req) {
-    userService.registerEmployee(req, companyId.toString());
-    return ResponseEntity.ok("TEST REGISTER EMPLOYEE");
+  public ResponseEntity<HttpStatus> registerEmployee(@AuthenticationPrincipal Jwt principal,
+                                                     @PathVariable String companyId,
+                                                     @RequestBody EmployeeRegisterReq req) {
+    userService.registerEmployee(req, companyId);
+    return ResponseEntity.ok().build();
   }
 }
