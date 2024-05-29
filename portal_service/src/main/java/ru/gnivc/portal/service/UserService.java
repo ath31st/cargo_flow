@@ -20,9 +20,11 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import ru.gnivc.common.exception.UserServiceException;
+import ru.gnivc.common.role.KeycloakRealmRoles;
+import ru.gnivc.portal.dto.user.EmployeeRegisterReq;
 import ru.gnivc.portal.dto.user.IndividualRegisterReq;
 import ru.gnivc.portal.dto.user.NewUserDataReq;
-import ru.gnivc.portal.exception.UserServiceException;
 import ru.gnivc.portal.util.PasswordGenerator;
 
 @Service
@@ -56,7 +58,7 @@ public class UserService {
     user.setUsername(username);
     user.setFirstName(req.firstName());
     user.setLastName(req.lastName());
-    user.setEmail(req.email());
+    user.setEmail(req.email().toLowerCase().trim());
     user.setCredentials(Collections.singletonList(credential));
     user.setEnabled(true);
     user.setEmailVerified(true);
@@ -211,6 +213,40 @@ public class UserService {
     if (!users.isEmpty()) {
       throw new UserServiceException(
           HttpStatus.CONFLICT, "User with email " + email + " already exists");
+    }
+  }
+
+  public void registerEmployee(EmployeeRegisterReq req, String companyId) {
+    List<UserRepresentation> users = getUsersResource()
+        .searchByEmail(req.email().toLowerCase().trim(), true);
+    if (!users.isEmpty()) {
+      String userId = users.get(0).getId();
+      checkExistsEmployeeInCompany(userId, companyId);
+
+      KeycloakRealmRoles role = KeycloakRealmRoles.valueOf(req.role());
+
+      addRealmRoleToUser(userId, role.name());
+      addAttributeRoleToUser(userId, role.getAttributeName(), companyId);
+    } else {
+      throw new UserServiceException(
+          HttpStatus.NOT_FOUND, "User with email " + req.email() + " not found");
+    }
+  }
+
+  private void checkExistsEmployeeInCompany(String userId, String companyId) {
+    UserRepresentation user = getUsersResource().get(userId).toRepresentation();
+
+    Map<String, List<String>> attributes = user.getAttributes();
+    if (attributes != null) {
+      boolean companyIdFound = attributes.entrySet().stream()
+          .filter(a -> KeycloakRealmRoles.getAttributeNames().contains(a.getKey()))
+          .flatMap(a -> a.getValue().stream())
+          .anyMatch(c -> c.equals(companyId));
+
+      if (companyIdFound) {
+        throw new UserServiceException(HttpStatus.CONFLICT,
+            "Employee already belongs to the company");
+      }
     }
   }
 }

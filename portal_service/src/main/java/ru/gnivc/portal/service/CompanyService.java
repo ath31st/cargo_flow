@@ -1,6 +1,5 @@
 package ru.gnivc.portal.service;
 
-import static ru.gnivc.common.role.KeycloakAttributeRoles.ADMIN_ROLE;
 import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 
 import lombok.RequiredArgsConstructor;
@@ -8,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gnivc.common.exception.CompanyServiceException;
 import ru.gnivc.portal.dto.user.DadataCompany;
 import ru.gnivc.portal.entity.Company;
-import ru.gnivc.common.exception.CompanyServiceException;
 import ru.gnivc.portal.repository.CompanyRepository;
 
 @Slf4j
@@ -42,12 +41,12 @@ public class CompanyService {
 
     try {
       userService.addRealmRoleToUser(userId, ADMIN.name());
-      userService.addAttributeRoleToUser(userId, ADMIN_ROLE.getRoleName(),
+      userService.addAttributeRoleToUser(userId, ADMIN.getAttributeName(),
           newCompany.getId().toString());
     } catch (Exception e) {
       if (newCompany != null) {
         userService.removeRealmRoleFromUser(userId, ADMIN.name());
-        userService.removeAttributeRoleFromUser(userId, ADMIN_ROLE.getRoleName(),
+        userService.removeAttributeRoleFromUser(userId, ADMIN.getAttributeName(),
             newCompany.getId().toString());
       }
       throw new CompanyServiceException(HttpStatus.BAD_REQUEST, e.getMessage());

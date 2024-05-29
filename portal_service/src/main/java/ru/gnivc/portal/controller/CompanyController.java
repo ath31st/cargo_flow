@@ -13,20 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gnivc.portal.dto.user.EmployeeRegisterReq;
 import ru.gnivc.portal.service.CompanyService;
+import ru.gnivc.portal.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/portal/v1/companies")
 public class CompanyController {
   private final CompanyService companyService;
-
-  @PreAuthorize("#principal.getClaimAsStringList('adminRole').contains(#companyId)")
-  @PostMapping("/some-manipulation-with-company/{companyId}")
-  public ResponseEntity<HttpStatus> manipulationWithCompany(
-      @AuthenticationPrincipal Jwt principal, @PathVariable String companyId) {
-
-    return ResponseEntity.ok().body(HttpStatus.OK);
-  }
+  private final UserService userService;
 
   @PostMapping("/register-company/{company-inn}")
   public ResponseEntity<HttpStatus> registerCompany(@PathVariable("company-inn") String companyInn,
@@ -41,7 +35,7 @@ public class CompanyController {
   public ResponseEntity<String> registerEmployee(@AuthenticationPrincipal Jwt principal,
                                                  @PathVariable Integer companyId,
                                                  @RequestBody EmployeeRegisterReq req) {
-
+    userService.registerEmployee(req, companyId.toString());
     return ResponseEntity.ok("TEST REGISTER EMPLOYEE");
   }
 }
