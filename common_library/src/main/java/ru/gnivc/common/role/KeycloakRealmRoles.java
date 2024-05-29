@@ -1,19 +1,20 @@
 package ru.gnivc.common.role;
 
-public enum KeycloakRealmRoles {
-  REALM_ADMIN(1),
-  REGISTRATOR(2),
-  ADMIN(3),
-  LOGIST(4),
-  DRIVER(5);
+import lombok.Getter;
 
-  KeycloakRealmRoles(int priority) {
+@Getter
+public enum KeycloakRealmRoles {
+  REALM_ADMIN(1, null),
+  REGISTRATOR(2, null),
+  ADMIN(3, "adminRole"),
+  LOGIST(4, "logistRole"),
+  DRIVER(5, "driverRole");
+
+  KeycloakRealmRoles(int priority, String attributeName) {
     this.priority = priority;
+    this.attributeName = attributeName;
   }
 
   private final int priority;
-
-  public int getPriority() {
-    return priority;
-  }
+  private final String attributeName;
 }
