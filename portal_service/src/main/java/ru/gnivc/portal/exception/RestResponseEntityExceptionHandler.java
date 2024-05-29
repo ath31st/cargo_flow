@@ -21,6 +21,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.gnivc.common.exception.AbstractException;
+import ru.gnivc.common.exception.CompanyServiceException;
+import ru.gnivc.common.exception.RealmRoleException;
+import ru.gnivc.common.exception.Response;
+import ru.gnivc.common.exception.UserServiceException;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
@@ -32,6 +37,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
   @ExceptionHandler(CompanyServiceException.class)
   protected ResponseEntity<Response> handleCompanyServiceException(CompanyServiceException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
+  }
+
+  @ExceptionHandler(RealmRoleException.class)
+  protected ResponseEntity<Response> handleRealmRoleException(RealmRoleException e) {
     return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 
