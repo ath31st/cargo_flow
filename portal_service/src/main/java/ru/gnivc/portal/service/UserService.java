@@ -62,7 +62,10 @@ public class UserService {
 
     try (Response response = getUsersResource().create(user)) {
       if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
-        addRealmRoleToUser(username, REGISTRATOR.name());
+        List<UserRepresentation> users = getUsersResource().search(username);
+        UserRepresentation ur = users.get(0);
+        String userId = ur.getId();
+        addRealmRoleToUser(userId, REGISTRATOR.name());
       }
     } catch (Exception e) {
       throw new UserServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -71,12 +74,7 @@ public class UserService {
     return randomPassword;
   }
 
-  public void addRealmRoleToUser(String username, String roleName) {
-    List<UserRepresentation> users = getUsersResource().search(username);
-
-    UserRepresentation user = users.get(0);
-    String userId = user.getId();
-
+  public void addRealmRoleToUser(String userId, String roleName) {
     RoleRepresentation role = keycloak.realm(realm)
         .roles()
         .get(roleName)
@@ -87,6 +85,19 @@ public class UserService {
         .realmLevel()
         .add(Collections.singletonList(role));
   }
+
+  public void removeRealmRoleFromUser(String userId, String roleName) {
+    RoleRepresentation role = keycloak.realm(realm)
+        .roles()
+        .get(roleName)
+        .toRepresentation();
+
+    UserResource userResource = getUsersResource().get(userId);
+    userResource.roles()
+        .realmLevel()
+        .remove(Collections.singletonList(role));
+  }
+
 
   public void addAttributeRoleToUser(String userId, String attributeName, String companyId) {
     UserRepresentation user = getUsersResource().get(userId).toRepresentation();
@@ -101,6 +112,28 @@ public class UserService {
     UserResource userResource = getUsersResource().get(userId);
     userResource.update(user);
   }
+
+  public void removeAttributeRoleFromUser(String userId, String attributeName, String companyId) {
+    UserRepresentation user = getUsersResource().get(userId).toRepresentation();
+
+    Map<String, List<String>> attributes = user.getAttributes();
+    if (attributes != null && attributes.containsKey(attributeName)) {
+      List<String> companyIds = attributes.get(attributeName);
+      if (companyIds != null && companyIds.contains(companyId)) {
+        companyIds.remove(companyId);
+        if (companyIds.isEmpty()) {
+          attributes.remove(attributeName);
+        } else {
+          attributes.put(attributeName, companyIds);
+        }
+        user.setAttributes(attributes);
+
+        UserResource userResource = getUsersResource().get(userId);
+        userResource.update(user);
+      }
+    }
+  }
+
 
   public void changeData(Principal principal, NewUserDataReq req) {
     UserResource userResource = getUsersResource().get(principal.getName());
