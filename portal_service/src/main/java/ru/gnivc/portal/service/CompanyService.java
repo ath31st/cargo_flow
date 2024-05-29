@@ -4,11 +4,14 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gnivc.common.exception.CompanyServiceException;
 import ru.gnivc.portal.dto.company.CompanyDto;
+import ru.gnivc.portal.dto.company.CompanyShortDto;
 import ru.gnivc.portal.dto.company.DadataCompany;
 import ru.gnivc.portal.entity.Company;
 import ru.gnivc.portal.repository.CompanyRepository;
@@ -58,7 +61,12 @@ public class CompanyService {
     checkCompanyExists(companyId);
 
     Company c = companyRepository.findById(Integer.parseInt(companyId)).get();
-    return new CompanyDto(c.getId(), c.getName(), c.getInn(), c.getKpp(), c.getOgrn(), 0, 0);
+    return new CompanyDto(c.getId(), c.getName(), c.getInn(), c.getInn(), c.getKpp(), c.getOgrn(), 0, 0);
+  }
+
+  public Page<CompanyShortDto> getCompanies(Pageable pageable) {
+    return companyRepository.findAll(pageable)
+        .map(c -> new CompanyShortDto(c.getId(), c.getName(), c.getInn()));
   }
 
   private void checkCompanyExists(String companyInn) {
