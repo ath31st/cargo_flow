@@ -1,6 +1,7 @@
 package ru.gnivc.portal.service;
 
-import static ru.gnivc.common.role.KeycloakRoles.ADMIN;
+import static ru.gnivc.common.role.KeycloakAttributeRoles.ADMIN_ROLE;
+import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +42,13 @@ public class CompanyService {
 
     try {
       userService.addRealmRoleToUser(userId, ADMIN.name());
-      userService.addAttributeRoleToUser(userId, "adminRole", newCompany.getId().toString());
+      userService.addAttributeRoleToUser(userId, ADMIN_ROLE.getRoleName(),
+          newCompany.getId().toString());
     } catch (Exception e) {
       if (newCompany != null) {
         userService.removeRealmRoleFromUser(userId, ADMIN.name());
-        userService.removeAttributeRoleFromUser(userId, "adminRole", newCompany.getId().toString());
+        userService.removeAttributeRoleFromUser(userId, ADMIN_ROLE.getRoleName(),
+            newCompany.getId().toString());
       }
       throw new CompanyServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
     }

@@ -1,10 +1,11 @@
 package ru.gnivc.portal.service;
 
-import static ru.gnivc.common.role.KeycloakRoles.REALM_ADMIN;
-import static ru.gnivc.common.role.KeycloakRoles.REGISTRATOR;
+import static ru.gnivc.common.role.KeycloakRealmRoles.REALM_ADMIN;
+import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
 import jakarta.ws.rs.core.Response;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +99,6 @@ public class UserService {
         .remove(Collections.singletonList(role));
   }
 
-
   public void addAttributeRoleToUser(String userId, String attributeName, String companyId) {
     UserRepresentation user = getUsersResource().get(userId).toRepresentation();
 
@@ -106,7 +106,12 @@ public class UserService {
     if (attributes == null) {
       attributes = new HashMap<>();
     }
-    attributes.put(attributeName, Collections.singletonList(companyId));
+
+    List<String> companyIds = attributes.getOrDefault(attributeName, new ArrayList<>());
+    if (!companyIds.contains(companyId)) {
+      companyIds.add(companyId);
+    }
+    attributes.put(attributeName, companyIds);
     user.setAttributes(attributes);
 
     UserResource userResource = getUsersResource().get(userId);

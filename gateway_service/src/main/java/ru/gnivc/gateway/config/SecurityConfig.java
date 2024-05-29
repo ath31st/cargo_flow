@@ -1,6 +1,6 @@
 package ru.gnivc.gateway.config;
 
-import static ru.gnivc.common.role.KeycloakRoles.REGISTRATOR;
+import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
