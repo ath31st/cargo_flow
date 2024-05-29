@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,19 +38,16 @@ public class UserController {
   }
 
   @GetMapping("/reset-password/{email}")
-  @PreAuthorize("#principal.getClaimAsString('email').equals(email)")
   public ResponseEntity<String> resetPassword(
       @AuthenticationPrincipal Jwt principal, @PathVariable String email) {
-    final String password = userService.changePassword(principal.getSubject(), null);
+    final String password = userService.changePassword(principal.getSubject(), email, null);
     return ResponseEntity.ok(password);
   }
 
   @PutMapping("/change-password")
-  @PreAuthorize("#principal.getClaim('email') != null " +
-      "&& #principal.getClaimAsString('email').equals(#req.email())")
   public ResponseEntity<HttpStatus> changePassword(
       @AuthenticationPrincipal Jwt principal, @RequestBody NewUserPasswordReq req) {
-    userService.changePassword(principal.getSubject(), req.newPassword());
+    userService.changePassword(principal.getSubject(), req.email(), req.newPassword());
     return ResponseEntity.ok().build();
   }
 
