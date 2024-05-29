@@ -12,7 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.gnivc.portal.dto.user.DadataCompany;
+import ru.gnivc.portal.dto.company.DadataCompany;
 
 @Service
 @RequiredArgsConstructor

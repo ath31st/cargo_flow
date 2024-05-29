@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gnivc.common.exception.CompanyServiceException;
-import ru.gnivc.portal.dto.user.DadataCompany;
+import ru.gnivc.portal.dto.company.CompanyDto;
+import ru.gnivc.portal.dto.company.DadataCompany;
 import ru.gnivc.portal.entity.Company;
 import ru.gnivc.portal.repository.CompanyRepository;
 
@@ -51,6 +52,13 @@ public class CompanyService {
       }
       throw new CompanyServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
+  }
+
+  public CompanyDto getCompanyInfo(String companyId) {
+    checkCompanyExists(companyId);
+
+    Company c = companyRepository.findById(Integer.parseInt(companyId)).get();
+    return new CompanyDto(c.getId(), c.getName(), c.getInn(), c.getKpp(), c.getOgrn(), 0, 0);
   }
 
   private void checkCompanyExists(String companyInn) {

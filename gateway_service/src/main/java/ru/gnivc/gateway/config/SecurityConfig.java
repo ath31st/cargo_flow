@@ -7,6 +7,7 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -33,6 +34,8 @@ public class SecurityConfig {
 
           req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(REGISTRATOR.name());
           req.pathMatchers("portal/v1/companies/{companyId}/register-employee").hasAnyAuthority(ADMIN.name(), LOGIST.name());
+          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}").hasAuthority(ADMIN.name());
+          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/all").hasAuthority(ADMIN.name());
           req.anyExchange().authenticated();
         })
         .oauth2ResourceServer(oauth2 ->

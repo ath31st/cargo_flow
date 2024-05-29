@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.gnivc.portal.dto.company.CompanyDto;
 import ru.gnivc.portal.dto.user.EmployeeRegisterReq;
 import ru.gnivc.portal.service.CompanyService;
 import ru.gnivc.portal.service.UserService;
@@ -26,7 +28,6 @@ public class CompanyController {
   public ResponseEntity<HttpStatus> registerCompany(@PathVariable("company-inn") String companyInn,
                                                     @AuthenticationPrincipal Jwt principal) {
     companyService.registerCompany(companyInn, principal.getSubject());
-
     return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 
@@ -36,6 +37,16 @@ public class CompanyController {
                                                      @PathVariable String companyId,
                                                      @RequestBody EmployeeRegisterReq req) {
     userService.registerEmployee(req, companyId);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{companyId}")
+  public ResponseEntity<CompanyDto> companyInfo(@PathVariable String companyId) {
+    return ResponseEntity.ok().body(companyService.getCompanyInfo(companyId));
+  }
+
+  @GetMapping("/all")
+  public ResponseEntity<CompanyDto> allCompanies() {
     return ResponseEntity.ok().build();
   }
 }
