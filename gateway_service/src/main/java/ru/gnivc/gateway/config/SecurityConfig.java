@@ -1,5 +1,7 @@
 package ru.gnivc.gateway.config;
 
+import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
+import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class SecurityConfig {
           req.pathMatchers("portal/v1/users/register-individual").permitAll();
 
           req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(REGISTRATOR.name());
+          req.pathMatchers("portal/v1/companies/{companyId}/register-employee").hasAnyAuthority(ADMIN.name(), LOGIST.name());
           req.anyExchange().authenticated();
         })
         .oauth2ResourceServer(oauth2 ->
