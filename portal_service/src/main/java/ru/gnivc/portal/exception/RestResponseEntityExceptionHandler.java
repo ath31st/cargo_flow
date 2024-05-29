@@ -15,13 +15,11 @@ import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import javax.naming.AuthenticationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -29,6 +27,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
   @ExceptionHandler(UserServiceException.class)
   protected ResponseEntity<Response> handleUserServiceException(UserServiceException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
+  }
+
+  @ExceptionHandler(CompanyServiceException.class)
+  protected ResponseEntity<Response> handleCompanyServiceException(CompanyServiceException e) {
     return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 

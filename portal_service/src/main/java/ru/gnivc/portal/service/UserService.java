@@ -6,7 +6,9 @@ import static ru.gnivc.common.role.KeycloakRoles.REGISTRATOR;
 import jakarta.ws.rs.core.Response;
 import java.security.Principal;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
@@ -84,6 +86,20 @@ public class UserService {
     userResource.roles()
         .realmLevel()
         .add(Collections.singletonList(role));
+  }
+
+  public void addAttributeRoleToUser(String userId, String attributeName, String companyId) {
+    UserRepresentation user = getUsersResource().get(userId).toRepresentation();
+
+    Map<String, List<String>> attributes = user.getAttributes();
+    if (attributes == null) {
+      attributes = new HashMap<>();
+    }
+    attributes.put(attributeName, Collections.singletonList(companyId));
+    user.setAttributes(attributes);
+
+    UserResource userResource = getUsersResource().get(userId);
+    userResource.update(user);
   }
 
   public void changeData(Principal principal, NewUserDataReq req) {
