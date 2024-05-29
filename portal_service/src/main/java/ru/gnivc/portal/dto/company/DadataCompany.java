@@ -1,4 +1,4 @@
-package ru.gnivc.portal.dto.user;
+package ru.gnivc.portal.dto.company;
 
 public record DadataCompany(
     String name,
