@@ -5,7 +5,6 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REALM_ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
-import com.netflix.discovery.shared.Pair;
 import jakarta.ws.rs.core.Response;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -236,18 +235,13 @@ public class UserService {
     }
   }
 
-  public Pair<Long, Long> getQuantityLogistsAndDrivers(String companyId) {
-    List<UserRepresentation> users = getUsersResource().list();
+  public List<String> getEmployeesByRole(String companyId, KeycloakRealmRoles role) {
+    List<UserRepresentation> users = getUsersResource().searchByAttributes(role.getAttributeName());
 
-    long logists = users.stream()
-        .filter(user -> hasRoleInCompany(user, LOGIST.getAttributeName(), companyId))
-        .count();
-
-    long drivers = users.stream()
-        .filter(user -> hasRoleInCompany(user, DRIVER.getAttributeName(), companyId))
-        .count();
-
-    return new Pair<>(logists, drivers);
+    return users.stream()
+        .filter(user -> hasRoleInCompany(user, role.getAttributeName(), companyId))
+        .map(user -> user.getEmail() + " : " + role.name())
+        .toList();
   }
 
   private boolean hasRoleInCompany(UserRepresentation user, String roleName, String companyId) {
