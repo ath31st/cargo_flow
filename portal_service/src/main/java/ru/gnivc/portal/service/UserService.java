@@ -1,7 +1,5 @@
 package ru.gnivc.portal.service;
 
-import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
-import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REALM_ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 

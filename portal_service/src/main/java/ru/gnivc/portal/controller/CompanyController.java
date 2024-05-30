@@ -1,5 +1,6 @@
 package ru.gnivc.portal.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.gnivc.portal.dto.company.CompanyDto;
 import ru.gnivc.portal.dto.company.CompanyShortDto;
 import ru.gnivc.portal.dto.user.EmployeeRegisterReq;
+import ru.gnivc.portal.dto.vehicle.NewVehicleRegisterReq;
+import ru.gnivc.portal.entity.Company;
 import ru.gnivc.portal.service.CompanyService;
+import ru.gnivc.portal.service.CompanyVehicleService;
 import ru.gnivc.portal.service.UserService;
 
 @RestController
@@ -28,6 +32,7 @@ import ru.gnivc.portal.service.UserService;
 public class CompanyController {
   private final CompanyService companyService;
   private final UserService userService;
+  private final CompanyVehicleService companyVehicleService;
 
   @PostMapping("/register-company/{company-inn}")
   public ResponseEntity<HttpStatus> registerCompany(@PathVariable("company-inn") String companyInn,
@@ -43,6 +48,17 @@ public class CompanyController {
                                                      @RequestBody EmployeeRegisterReq req) {
     userService.registerEmployee(req, companyId);
     return ResponseEntity.ok().build();
+  }
+
+  @Transactional
+  @PreAuthorize("@permissionValidator.hasAdminOrLogistAccess(#principal, #companyId)")
+  @PostMapping("/{companyId}/register-vehicle")
+  public ResponseEntity<HttpStatus> registerVehicle(@AuthenticationPrincipal Jwt principal,
+                                                    @PathVariable String companyId,
+                                                    @RequestBody NewVehicleRegisterReq req) {
+    Company company = companyService.getCompany(companyId);
+    companyVehicleService.registerVehicle(req, company);
+    return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 
   @GetMapping("/{companyId}")

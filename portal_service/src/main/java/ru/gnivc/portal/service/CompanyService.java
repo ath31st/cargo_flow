@@ -59,9 +59,13 @@ public class CompanyService {
     }
   }
 
-  public CompanyDto getCompanyInfo(String companyId) {
-    Company company = companyRepository.findById(Integer.parseInt(companyId))
+  public Company getCompany(String companyId) {
+    return companyRepository.findById(Integer.parseInt(companyId))
         .orElseThrow(() -> new CompanyServiceException(HttpStatus.NOT_FOUND, "Company not found"));
+  }
+
+  public CompanyDto getCompanyInfo(String companyId) {
+    Company company = getCompany(companyId);
 
     long logistCount = userService.getEmployeesByRole(companyId, LOGIST).size();
     long driverCount = userService.getEmployeesByRole(companyId, DRIVER).size();
