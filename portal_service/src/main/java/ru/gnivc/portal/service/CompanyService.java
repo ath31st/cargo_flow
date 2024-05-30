@@ -4,6 +4,8 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
 import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -85,6 +87,19 @@ public class CompanyService {
   public Page<CompanyShortDto> getCompanies(Pageable pageable) {
     return companyRepository.findAll(pageable)
         .map(c -> new CompanyShortDto(c.getId(), c.getName(), c.getInn()));
+  }
+
+  public List<String> getEmpolyees(String companyId) {
+    final List<String> admins = userService.getEmployeesByRole(companyId, ADMIN);
+    final List<String> logists = userService.getEmployeesByRole(companyId, LOGIST);
+    final List<String> drivers = userService.getEmployeesByRole(companyId, DRIVER);
+
+    List<String> allEmployees = new ArrayList<>();
+    allEmployees.addAll(admins);
+    allEmployees.addAll(logists);
+    allEmployees.addAll(drivers);
+
+    return allEmployees;
   }
 
   private void checkCompanyExists(String companyInn) {

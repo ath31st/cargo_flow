@@ -1,6 +1,7 @@
 package ru.gnivc.portal.controller;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,5 +71,10 @@ public class CompanyController {
       @RequestParam(defaultValue = "10") Integer pageSize) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.ok().body(companyService.getCompanies(pageable));
+  }
+
+  @GetMapping("/{companyId}/employees")
+  public ResponseEntity<List<String>> companyEmployees(@PathVariable String companyId) {
+    return ResponseEntity.ok().body(companyService.getEmpolyees(companyId));
   }
 }

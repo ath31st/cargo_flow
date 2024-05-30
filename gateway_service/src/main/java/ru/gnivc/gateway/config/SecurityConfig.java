@@ -37,6 +37,7 @@ public class SecurityConfig {
           req.pathMatchers("portal/v1/companies/{companyId}/register-vehicle").hasAnyAuthority(ADMIN.name(), LOGIST.name());
           req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}").hasAuthority(ADMIN.name());
           req.pathMatchers(HttpMethod.GET, "portal/v1/companies/all").hasAuthority(ADMIN.name());
+          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}/employees").hasAuthority(ADMIN.name());
           req.anyExchange().authenticated();
         })
         .oauth2ResourceServer(oauth2 ->
