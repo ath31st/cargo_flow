@@ -36,7 +36,7 @@ public class CompanyController {
     return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 
-  @PreAuthorize("@permissionValidator.validateForRegisterEmployee(#principal, #companyId, #req.role())")
+  @PreAuthorize("@permissionValidator.canRegisterEmployee(#principal, #companyId, #req.role())")
   @PostMapping("/{companyId}/register-employee")
   public ResponseEntity<HttpStatus> registerEmployee(@AuthenticationPrincipal Jwt principal,
                                                      @PathVariable String companyId,
