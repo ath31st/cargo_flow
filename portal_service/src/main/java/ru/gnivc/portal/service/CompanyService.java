@@ -89,7 +89,7 @@ public class CompanyService {
         .map(c -> new CompanyShortDto(c.getId(), c.getName(), c.getInn()));
   }
 
-  public List<String> getEmpolyees(String companyId) {
+  public List<String> getEmployees(String companyId) {
     final List<String> admins = userService.getEmployeesByRole(companyId, ADMIN);
     final List<String> logists = userService.getEmployeesByRole(companyId, LOGIST);
     final List<String> drivers = userService.getEmployeesByRole(companyId, DRIVER);

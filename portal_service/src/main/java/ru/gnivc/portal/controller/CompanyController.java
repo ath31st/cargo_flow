@@ -75,6 +75,6 @@ public class CompanyController {
 
   @GetMapping("/{companyId}/employees")
   public ResponseEntity<List<String>> companyEmployees(@PathVariable String companyId) {
-    return ResponseEntity.ok().body(companyService.getEmpolyees(companyId));
+    return ResponseEntity.ok().body(companyService.getEmployees(companyId));
   }
 }
