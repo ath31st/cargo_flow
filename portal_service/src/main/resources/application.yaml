@@ -11,6 +11,12 @@ spring:
         jwt:
           jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
 
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
   datasource:
     url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:cargo_flow_db}
     username: ${POSTGRES_USER:postgres}
