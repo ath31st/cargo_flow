@@ -41,20 +41,18 @@ public class CompanyController {
     return ResponseEntity.ok().body(HttpStatus.CREATED);
   }
 
-  @PreAuthorize("@permissionValidator.canRegisterEmployee(#principal, #companyId, #req.role())")
+  @PreAuthorize("@permissionValidator.canRegisterEmployee(#companyId, #req.role())")
   @PostMapping("/{companyId}/register-employee")
-  public ResponseEntity<HttpStatus> registerEmployee(@AuthenticationPrincipal Jwt principal,
-                                                     @PathVariable String companyId,
+  public ResponseEntity<HttpStatus> registerEmployee(@PathVariable String companyId,
                                                      @RequestBody EmployeeRegisterReq req) {
     userService.registerEmployee(req, companyId);
     return ResponseEntity.ok().build();
   }
 
   @Transactional
-  @PreAuthorize("@permissionValidator.hasAdminOrLogistAccess(#principal, #companyId)")
+  @PreAuthorize("@permissionValidator.hasAdminOrLogistAccess(#companyId)")
   @PostMapping("/{companyId}/register-vehicle")
-  public ResponseEntity<HttpStatus> registerVehicle(@AuthenticationPrincipal Jwt principal,
-                                                    @PathVariable String companyId,
+  public ResponseEntity<HttpStatus> registerVehicle(@PathVariable String companyId,
                                                     @RequestBody NewVehicleRegisterReq req) {
     Company company = companyService.getCompany(companyId);
     companyVehicleService.registerVehicle(req, company);
