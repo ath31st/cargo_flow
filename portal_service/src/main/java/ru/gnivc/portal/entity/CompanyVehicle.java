@@ -36,6 +36,11 @@ public class CompanyVehicle {
   @Column(name = "year", nullable = false)
   private Integer year;
 
+  @Size(max = 20)
+  @NotNull
+  @Column(name = "license_plate", nullable = false)
+  private String licensePlate;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "company_id")
   private Company company;

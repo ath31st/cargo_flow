@@ -6,5 +6,5 @@ import ru.gnivc.portal.entity.CompanyVehicle;
 
 @Repository
 public interface CompanyVehicleRepository extends JpaRepository<CompanyVehicle, Integer> {
-  boolean existsByVin(String vin);
+  boolean existsByVinIgnoreCaseOrLicensePlateIgnoreCase(String vin, String licensePlate);
 }

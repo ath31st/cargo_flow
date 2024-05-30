@@ -15,20 +15,22 @@ public class CompanyVehicleService {
   private final CompanyVehicleRepository companyVehicleRepository;
 
   public void registerVehicle(NewVehicleRegisterReq req, Company company) {
-    checkExistsVehicleByVin(req.vin());
+    checkExistsVehicleByVin(req.vin(), req.licensePlate());
 
     CompanyVehicle cv = new CompanyVehicle();
-    cv.setVin(req.vin());
+    cv.setVin(req.vin().toUpperCase());
+    cv.setLicensePlate(req.licensePlate().toUpperCase());
     cv.setYear(req.year());
     cv.setCompany(company);
 
     companyVehicleRepository.save(cv);
   }
 
-  private void checkExistsVehicleByVin(String vin) {
-    if (companyVehicleRepository.existsByVin(vin)) {
+  private void checkExistsVehicleByVin(String vin, String licensePlate) {
+    if (companyVehicleRepository.existsByVinIgnoreCaseOrLicensePlateIgnoreCase(vin, licensePlate)) {
       throw new CompanyVehicleServiceException(HttpStatus.CONFLICT,
-          "Vehicle with VIN: " + vin + " already exists");
+          String.format("Vehicle with this registration data: %s %s already exists",
+              vin, licensePlate));
     }
   }
 }
