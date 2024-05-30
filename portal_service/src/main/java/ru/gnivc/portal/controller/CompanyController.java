@@ -51,7 +51,7 @@ public class CompanyController {
   }
 
   @Transactional
-  @PreAuthorize("@permissionValidator.hasAdminOrLogistAccess(#companyId)")
+  @PreAuthorize("@permissionValidator.hasCompanyAdminOrLogistAccess(#companyId)")
   @PostMapping("/{companyId}/register-vehicle")
   public ResponseEntity<HttpStatus> registerVehicle(@PathVariable String companyId,
                                                     @RequestBody NewVehicleRegisterReq req) {
