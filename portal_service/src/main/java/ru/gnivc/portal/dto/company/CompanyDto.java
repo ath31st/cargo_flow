@@ -1,5 +1,8 @@
 package ru.gnivc.portal.dto.company;
 
+import lombok.Builder;
+
+@Builder
 public record CompanyDto(
     Integer id,
     String name,

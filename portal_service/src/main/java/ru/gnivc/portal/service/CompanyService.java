@@ -70,10 +70,17 @@ public class CompanyService {
     long logistCount = userService.getEmployeesByRole(companyId, LOGIST).size();
     long driverCount = userService.getEmployeesByRole(companyId, DRIVER).size();
 
-    return new CompanyDto(company.getId(), company.getName(), company.getInn(),
-        company.getAddress(), company.getKpp(), company.getOgrn(), logistCount, driverCount);
+    return CompanyDto.builder()
+        .id(company.getId())
+        .name(company.getName())
+        .inn(company.getInn())
+        .address(company.getAddress())
+        .kpp(company.getKpp())
+        .ogrn(company.getOgrn())
+        .quantityLogists(logistCount)
+        .quantityDrivers(driverCount)
+        .build();
   }
-
 
   public Page<CompanyShortDto> getCompanies(Pageable pageable) {
     return companyRepository.findAll(pageable)
