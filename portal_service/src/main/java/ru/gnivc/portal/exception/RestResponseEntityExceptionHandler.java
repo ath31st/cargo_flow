@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.gnivc.common.exception.AbstractException;
 import ru.gnivc.common.exception.CompanyServiceException;
+import ru.gnivc.common.exception.CompanyVehicleServiceException;
 import ru.gnivc.common.exception.RealmRoleException;
 import ru.gnivc.common.exception.Response;
 import ru.gnivc.common.exception.UserServiceException;
@@ -42,6 +43,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
   @ExceptionHandler(RealmRoleException.class)
   protected ResponseEntity<Response> handleRealmRoleException(RealmRoleException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
+  }
+
+  @ExceptionHandler(CompanyVehicleServiceException.class)
+  protected ResponseEntity<Response> handleRealmRoleException(CompanyVehicleServiceException e) {
     return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 
