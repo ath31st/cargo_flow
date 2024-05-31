@@ -1,12 +1,15 @@
 package ru.gnivc.logist.config;
 
+import java.util.Collections;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import ru.gnivc.common.interceptor.TokenInterceptor;
 import ru.gnivc.common.validator.PermissionValidator;
 
 @Configuration
@@ -38,8 +41,11 @@ public class BeanConfig {
   }
 
   @Bean
+  @LoadBalanced
   public RestTemplate restTemplate() {
-    return new RestTemplate();
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.setInterceptors(Collections.singletonList(new TokenInterceptor()));
+    return restTemplate;
   }
 
   @Bean
