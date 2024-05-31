@@ -1,17 +1,17 @@
 version: '3.7'
 
 services:
-#  minio:
-#    image: minio/minio:latest
-#    command: server --console-address ":9001" /data/
-#    ports:
-#      - "9000:9000"
-#      - "9001:9001"
-#    environment:
-#      MINIO_ROOT_USER: test
-#      MINIO_ROOT_PASSWORD: test
-#    volumes:
-#      - minio:/data
+  #  minio:
+  #    image: minio/minio:latest
+  #    command: server --console-address ":9001" /data/
+  #    ports:
+  #      - "9000:9000"
+  #      - "9001:9001"
+  #    environment:
+  #      MINIO_ROOT_USER: test
+  #      MINIO_ROOT_PASSWORD: test
+  #    volumes:
+  #      - minio:/data
 
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.0
@@ -88,6 +88,7 @@ services:
     restart: on-failure
     volumes:
       - "database:/var/lib/postgresql/data"
+      - "./sql_scripts/init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql"
 
 networks:
   test_network:

@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS portal_schema;
+CREATE SCHEMA IF NOT EXISTS logist_schema;
