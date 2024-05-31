@@ -24,12 +24,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.gnivc.common.exception.AbstractException;
 import ru.gnivc.common.exception.CompanyServiceException;
 import ru.gnivc.common.exception.CompanyVehicleServiceException;
+import ru.gnivc.common.exception.KeycloakClientException;
 import ru.gnivc.common.exception.RealmRoleException;
 import ru.gnivc.common.exception.Response;
 import ru.gnivc.common.exception.UserServiceException;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+  @ExceptionHandler(KeycloakClientException.class)
+  protected ResponseEntity<Response> handleUserServiceException(KeycloakClientException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
+  }
 
   @ExceptionHandler(UserServiceException.class)
   protected ResponseEntity<Response> handleUserServiceException(UserServiceException e) {
