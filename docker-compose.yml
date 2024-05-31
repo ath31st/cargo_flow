@@ -75,21 +75,6 @@ services:
     networks:
       - test_network
 
-#  gateway:
-#    build: ./gateway_service
-#    environment:
-#      KEYCLOAK_URL: ${KEYCLOAK_URL}
-#      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
-#      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
-#      KEYCLOAK_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME}
-#      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-#      EUREKA_URI: ${EUREKA_URI}
-#    ports:
-#      - "8090:8090"
-#    depends_on:
-#      - keycloak
-#      - discovery
-
   postgres-container:
     image: postgres:15.5
     container_name: postgres-container
