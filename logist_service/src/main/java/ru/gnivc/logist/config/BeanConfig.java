@@ -9,6 +9,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import ru.gnivc.common.client.PortalClient;
 import ru.gnivc.common.interceptor.TokenInterceptor;
 import ru.gnivc.common.validator.PermissionValidator;
 
@@ -51,5 +52,10 @@ public class BeanConfig {
   @Bean
   public PermissionValidator permissionValidator() {
     return new PermissionValidator();
+  }
+
+  @Bean
+  public PortalClient portalClient() {
+    return new PortalClient(restTemplate());
   }
 }

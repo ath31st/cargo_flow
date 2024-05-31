@@ -1,10 +1,8 @@
-package ru.gnivc.logist.client;
+package ru.gnivc.common.client;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
 @RequiredArgsConstructor
 public class PortalClient {
   private final String PORTAL_PATH = "http://portal/portal/v1/companies";
