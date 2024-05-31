@@ -81,7 +81,7 @@
                     <password>postgres</password>
                     <url>jdbc:postgresql://localhost:5432/cargo_flow_db</url>
                     <schemas>
-                        <schema>public</schema>
+                        <schema>portal_schema</schema>
                     </schemas>
                 </configuration>
             </plugin>
