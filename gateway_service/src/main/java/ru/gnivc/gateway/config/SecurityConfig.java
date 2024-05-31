@@ -31,13 +31,15 @@ public class SecurityConfig {
 
           req.pathMatchers("/portal/v1/users/roles").hasAuthority(REGISTRATOR.name());
           req.pathMatchers("portal/v1/users/register-individual").permitAll();
-
           req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(REGISTRATOR.name());
           req.pathMatchers("portal/v1/companies/{companyId}/register-employee").hasAnyAuthority(ADMIN.name(), LOGIST.name());
           req.pathMatchers("portal/v1/companies/{companyId}/register-vehicle").hasAnyAuthority(ADMIN.name(), LOGIST.name());
           req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}").hasAuthority(ADMIN.name());
           req.pathMatchers(HttpMethod.GET, "portal/v1/companies/all").hasAuthority(ADMIN.name());
           req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}/employees").hasAuthority(ADMIN.name());
+
+          req.pathMatchers("logist/v1/**").hasAuthority(LOGIST.name());
+
           req.anyExchange().authenticated();
         })
         .oauth2ResourceServer(oauth2 ->

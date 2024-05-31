@@ -27,6 +27,11 @@ spring:
           predicates:
             - Path=/portal/**
 
+        - id: logist
+          uri: lb://logist
+          predicates:
+            - Path=/logist/**
+
 logging:
   level:
     org:
