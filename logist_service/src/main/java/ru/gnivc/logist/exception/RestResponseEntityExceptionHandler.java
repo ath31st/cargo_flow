@@ -10,16 +10,21 @@
 
 package ru.gnivc.logist.exception;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import javax.naming.AuthenticationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.gnivc.common.exception.AbstractException;
 import ru.gnivc.common.exception.CompanyServiceException;
@@ -30,7 +35,21 @@ import ru.gnivc.common.exception.Response;
 import ru.gnivc.common.exception.UserServiceException;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+  private final ObjectMapper mapper;
+
+  @ExceptionHandler(HttpStatusCodeException.class)
+  protected ResponseEntity<Response> handleUserServiceException(HttpStatusCodeException e) {
+    String errorMessage = extractErrorMessage(e.getMessage());
+    Response response = Response.builder()
+        .timestamp(LocalDateTime.now().toString())
+        .error(errorMessage)
+        .status((HttpStatus) e.getStatusCode())
+        .build();
+
+    return new ResponseEntity<>(response, response.getStatus());
+  }
 
   @ExceptionHandler(KeycloakClientException.class)
   protected ResponseEntity<Response> handleUserServiceException(KeycloakClientException e) {
@@ -94,6 +113,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         .build();
 
     return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+  }
+
+  private String extractErrorMessage(String message) {
+    try {
+      int jsonStart = message.indexOf("{");
+      if (jsonStart == -1) {
+        return message;
+      }
+      message = message.substring(jsonStart);
+      JsonNode jsonNode = mapper.readTree(message);
+      return jsonNode.path("error").asText();
+    } catch (IOException ex) {
+      return message;
+    }
   }
 
   private Response buildResponse(AbstractException e) {
