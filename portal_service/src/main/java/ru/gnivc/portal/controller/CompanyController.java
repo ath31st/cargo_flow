@@ -77,4 +77,11 @@ public class CompanyController {
   public ResponseEntity<List<String>> companyEmployees(@PathVariable String companyId) {
     return ResponseEntity.ok().body(companyService.getEmployees(companyId));
   }
+
+  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @GetMapping("/{companyId}/vehicles/{vehicleId}")
+  public ResponseEntity<String> getCompanyVehicleLicensePlate(
+      @PathVariable String companyId, @PathVariable Integer vehicleId) {
+    return ResponseEntity.ok().body(companyVehicleService.getLicensePlate(companyId, vehicleId));
+  }
 }

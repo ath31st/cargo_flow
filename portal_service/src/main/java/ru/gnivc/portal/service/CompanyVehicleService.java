@@ -1,5 +1,6 @@
 package ru.gnivc.portal.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,13 @@ public class CompanyVehicleService {
           String.format("Vehicle with this registration data: %s %s already exists",
               vin, licensePlate));
     }
+  }
+
+  public String getLicensePlate(String companyId, Integer vehicleId) {
+    Optional<String> licensePlate = companyVehicleRepository.findLicensePlateByCompanyIdAndVehicleId(
+        Integer.parseInt(companyId), vehicleId);
+    return licensePlate.orElseThrow(
+        () -> new CompanyVehicleServiceException(HttpStatus.NOT_FOUND,
+            "Vehicle with this registration data not found"));
   }
 }
