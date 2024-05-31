@@ -3,6 +3,7 @@ package ru.gnivc.portal.service;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REALM_ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -264,6 +265,28 @@ public class UserService {
         throw new UserServiceException(HttpStatus.CONFLICT,
             "Employee already belongs to the company");
       }
+    }
+  }
+
+  public String getDriverFullName(String id) {
+    final UserRepresentation user = getUserRepById(id);
+    return user.getFirstName() + " " + user.getLastName();
+  }
+
+  public void validateDriverInCompany(String driverKeycloakId, String companyId) {
+    UserRepresentation user = getUserRepById(driverKeycloakId);
+    if (!hasRoleInCompany(user, KeycloakRealmRoles.DRIVER.getAttributeName(), companyId)) {
+      throw new UserServiceException(HttpStatus.NOT_FOUND,
+          String.format("Driver with id: %s in company: %s not found", driverKeycloakId, companyId));
+    }
+  }
+
+  private UserRepresentation getUserRepById(String id) {
+    UserResource userResource = getUsersResource().get(id);
+    try {
+      return userResource.toRepresentation();
+    } catch (NotFoundException e) {
+      throw new UserServiceException(HttpStatus.NOT_FOUND, "User with id: " + id + " not found");
     }
   }
 }
