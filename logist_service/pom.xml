@@ -55,6 +55,11 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.22.3</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -71,6 +76,20 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.22.3</version>
+                <configuration>
+                    <cleanDisabled>false</cleanDisabled>
+                    <user>postgres</user>
+                    <password>postgres</password>
+                    <url>jdbc:postgresql://localhost:5432/cargo_flow_db</url>
+                    <schemas>
+                        <schema>logist_schema</schema>
+                    </schemas>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -18,10 +18,14 @@ spring:
       ddl-auto: validate
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:cargo_flow_db}
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:cargo_flow_db}?currentSchema=logist_schema
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     driverClassName: org.postgresql.Driver
+
+  flyway:
+    clean-on-validation-error: true
+    clean-disabled: false
 
 eureka:
   client:
