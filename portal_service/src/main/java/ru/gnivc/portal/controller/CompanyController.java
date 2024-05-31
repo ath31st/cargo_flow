@@ -79,9 +79,25 @@ public class CompanyController {
   }
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
-  @GetMapping("/{companyId}/vehicles/{vehicleId}")
+  @GetMapping("/{companyId}/vehicles/{vehicleId}/license-plate")
   public ResponseEntity<String> getCompanyVehicleLicensePlate(
       @PathVariable String companyId, @PathVariable Integer vehicleId) {
     return ResponseEntity.ok().body(companyVehicleService.getLicensePlate(companyId, vehicleId));
+  }
+
+  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @GetMapping("/{companyId}/drivers/{driverId}/full-name")
+  public ResponseEntity<String> getCompanyDriverFullName(
+      @PathVariable String companyId, @PathVariable String driverId) {
+    userService.validateDriverInCompany(driverId, companyId);
+    return ResponseEntity.ok().body(userService.getDriverFullName(driverId));
+  }
+
+  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @GetMapping("/{companyId}/drivers/{driverId}/validate")
+  public ResponseEntity<HttpStatus> validateDriverInCompany(
+      @PathVariable String companyId, @PathVariable String driverId) {
+    userService.validateDriverInCompany(driverId, companyId);
+    return ResponseEntity.ok().build();
   }
 }
