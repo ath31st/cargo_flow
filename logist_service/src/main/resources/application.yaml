@@ -5,9 +5,42 @@ spring:
   application:
     name: logist
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:cargo_flow_db}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driverClassName: org.postgresql.Driver
+
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
     preferIpAddress: true
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080}
+  realm: ${KEYCLOAK_REALM:cargo-flow}
+  client-id: ${KEYCLOAK_CLIENT_ID:logist-service}
+  username: ${KEYCLOAK_ADMIN_USERNAME:realm_admin}
+  password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:super-secret-logist-service-phrase}
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: DEBUG
