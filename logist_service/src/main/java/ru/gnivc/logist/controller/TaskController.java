@@ -22,16 +22,16 @@ public class TaskController {
 
   @PreAuthorize("#permissionValidator.hasCompanyLogistAccess(#companyId)")
   @GetMapping("/tasks/{companyId}/{taskId}")
-  public ResponseEntity<TaskDto> getTask(@PathVariable int companyId,
+  public ResponseEntity<TaskDto> getTask(@PathVariable String companyId,
                                          @PathVariable int taskId) {
-    return ResponseEntity.ok().body(taskService.getTaskDto(companyId, taskId));
+    return ResponseEntity.ok().body(taskService.getTaskDto(Integer.parseInt(companyId), taskId));
   }
 
   @PreAuthorize("#permissionValidator.hasCompanyLogistAccess(#companyId)")
   @PostMapping("/tasks/{companyId}/create-task")
   public ResponseEntity<HttpStatus> createTask(
-      @PathVariable int companyId, @RequestBody NewTaskReq req) {
-    taskService.createTask(companyId, req);
+      @PathVariable String companyId, @RequestBody NewTaskReq req) {
+    taskService.createTask(Integer.parseInt(companyId), req);
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
 }
