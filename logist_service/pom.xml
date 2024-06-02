@@ -60,6 +60,11 @@
             <artifactId>flyway-core</artifactId>
             <version>9.22.3</version>
         </dependency>
+        <dependency>
+            <groupId>ru.gnivc.starter</groupId>
+            <artifactId>cargo-flow-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

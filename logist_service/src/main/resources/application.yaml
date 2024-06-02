@@ -42,6 +42,10 @@ keycloak:
   password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
   client-secret: ${KEYCLOAK_CLIENT_SECRET:super-secret-logist-service-phrase}
 
+cargo-flow-starter:
+  portal:
+    url: http://portal/portal/v1
+
 logging:
   level:
     org:
