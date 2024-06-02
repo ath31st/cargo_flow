@@ -20,18 +20,18 @@ import ru.gnivc.logist.service.TaskService;
 public class TaskController {
   private final TaskService taskService;
 
-  @PreAuthorize("#permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
   @GetMapping("/tasks/{companyId}/{taskId}")
-  public ResponseEntity<TaskDto> getTask(@PathVariable String companyId,
+  public ResponseEntity<TaskDto> getTask(@PathVariable Integer companyId,
                                          @PathVariable int taskId) {
-    return ResponseEntity.ok().body(taskService.getTaskDto(Integer.parseInt(companyId), taskId));
+    return ResponseEntity.ok().body(taskService.getTaskDto(companyId, taskId));
   }
 
-  @PreAuthorize("#permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
   @PostMapping("/tasks/{companyId}/create-task")
   public ResponseEntity<HttpStatus> createTask(
-      @PathVariable String companyId, @RequestBody NewTaskReq req) {
-    taskService.createTask(Integer.parseInt(companyId), req);
+      @PathVariable Integer companyId, @RequestBody NewTaskReq req) {
+    taskService.createTask(companyId, req);
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
 }
