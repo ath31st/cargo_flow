@@ -2,7 +2,6 @@ package ru.gnivc.starter;
 
 import java.util.Collections;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +12,6 @@ import ru.gnivc.common.interceptor.TokenInterceptor;
 import ru.gnivc.starter.config.StarterProperties;
 
 @Configuration
-@ConfigurationPropertiesScan()
 @ConditionalOnClass(PortalClient.class)
 @EnableConfigurationProperties(StarterProperties.class)
 public class PortalClientAutoConfiguration {
