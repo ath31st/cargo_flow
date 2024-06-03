@@ -3,5 +3,4 @@ spring:
     name: portal_client_spring_boot_starter
 
 cargo-flow-starter:
-  portal:
-    url: default_url
+  portal-url: default_url
