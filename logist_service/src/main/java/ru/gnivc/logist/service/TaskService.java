@@ -1,6 +1,5 @@
 package ru.gnivc.logist.service;
 
-import java.time.Instant;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import ru.gnivc.common.exception.TaskServiceException;
 import ru.gnivc.logist.dto.NewTaskReq;
 import ru.gnivc.logist.dto.TaskDto;
 import ru.gnivc.logist.entity.Task;
+import ru.gnivc.logist.mapper.TaskMapper;
 import ru.gnivc.logist.repository.TaskRepository;
 
 @Service
@@ -17,6 +17,7 @@ import ru.gnivc.logist.repository.TaskRepository;
 public class TaskService {
   private final TaskRepository taskRepository;
   private final PortalClient portalClient;
+  private final TaskMapper taskMapper;
 
   public void createTask(int companyId, NewTaskReq newTask) {
     boolean validateDriverInCompany
@@ -25,42 +26,16 @@ public class TaskService {
         = portalClient.validateVehicleInCompany(companyId, newTask.companyVehicleId());
 
     if (validateDriverInCompany && validateVehicleInCompany) {
-      saveTask(companyId, newTask);
+      Task task = taskMapper.toEntity(companyId, newTask);
+      taskRepository.save(task);
     } else {
       throw new TaskServiceException(HttpStatus.BAD_REQUEST, "Task registration failed");
     }
   }
 
-  private void saveTask(int companyId, NewTaskReq newTask) {
-
-    Task t = new Task();
-    t.setStartPoint(newTask.startPoint());
-    t.setEndPoint(newTask.endPoint());
-    t.setDriverKeycloakId(newTask.driverKeycloakId());
-    t.setCargoDescription(newTask.cargoDescription());
-    t.setCompanyVehicleId(newTask.companyVehicleId());
-    t.setCompanyId(companyId);
-    t.setCreatedAt(Instant.now());
-
-    taskRepository.save(t);
-  }
-
   public TaskDto getTaskDto(int companyId, int taskId) {
     Task t = getTask(companyId, taskId);
-
-    String driverFullName =
-        portalClient.getCompanyDriverFullName(companyId, t.getDriverKeycloakId());
-    String vehicleLicensePlate =
-        portalClient.getCompanyVehicleLicensePlate(companyId, t.getCompanyVehicleId());
-
-    return TaskDto.builder()
-        .id(t.getId())
-        .startPoint(t.getStartPoint())
-        .endPoint(t.getEndPoint())
-        .driverFullName(driverFullName)
-        .cargoDescription(t.getCargoDescription())
-        .companyVehicleLicensePlate(vehicleLicensePlate)
-        .build();
+    return taskMapper.toDto(t, companyId);
   }
 
   private Task getTask(int companyId, int taskId) {
