@@ -2,6 +2,8 @@ package ru.gnivc.logist.service;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.client.PortalClient;
@@ -42,5 +44,10 @@ public class TaskService {
     final Optional<Task> optionalTask = taskRepository.findByCompanyIdAndId(companyId, taskId);
     return optionalTask.orElseThrow(() -> new TaskServiceException(HttpStatus.NOT_FOUND,
         "Task with id: " + taskId + " not found"));
+  }
+
+  public Page<TaskDto> getPageTask(Integer companyId, Pageable pageable) {
+    return taskRepository.findAllByCompanyId(companyId, pageable)
+        .map(t -> taskMapper.toDto(t, companyId));
   }
 }
