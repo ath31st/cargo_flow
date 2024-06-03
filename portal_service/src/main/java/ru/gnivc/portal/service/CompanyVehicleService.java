@@ -42,4 +42,11 @@ public class CompanyVehicleService {
         () -> new CompanyVehicleServiceException(HttpStatus.NOT_FOUND,
             "Vehicle with this registration data not found"));
   }
+
+  public void validateVehicleInCompany(Integer vehicleId, Integer companyId) {
+    if (!companyVehicleRepository.existsByCompanyIdAndVehicleId(companyId, vehicleId)) {
+      throw new CompanyVehicleServiceException(HttpStatus.NOT_FOUND,
+          String.format("Vehicle with id: %d in company with id %d not found", vehicleId, companyId));
+    }
+  }
 }

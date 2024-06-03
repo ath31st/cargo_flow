@@ -100,4 +100,12 @@ public class CompanyController {
     userService.validateDriverInCompany(driverId, companyId);
     return ResponseEntity.ok().build();
   }
+
+  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @GetMapping("/{companyId}/vehicles/{vehicleId}/validate")
+  public ResponseEntity<HttpStatus> validateVehicleInCompany(
+      @PathVariable Integer companyId, @PathVariable Integer vehicleId) {
+    companyVehicleService.validateVehicleInCompany(vehicleId, companyId);
+    return ResponseEntity.ok().build();
+  }
 }

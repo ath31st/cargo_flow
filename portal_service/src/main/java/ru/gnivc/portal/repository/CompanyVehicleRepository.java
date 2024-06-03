@@ -15,4 +15,9 @@ public interface CompanyVehicleRepository extends JpaRepository<CompanyVehicle, 
       + "inner join cv.company c "
       + "where c.id = ?1 and cv.id = ?2")
   Optional<String> findLicensePlateByCompanyIdAndVehicleId(int companyId, int vehicleId);
+
+  @Query("select count(cv) > 0 from CompanyVehicle cv "
+      + "inner join cv.company c "
+      + "where c.id = ?1 and cv.id = ?2")
+  boolean existsByCompanyIdAndVehicleId(int companyId, int vehicleId);
 }
