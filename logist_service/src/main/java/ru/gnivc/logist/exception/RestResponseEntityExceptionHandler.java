@@ -32,6 +32,7 @@ import ru.gnivc.common.exception.CompanyVehicleServiceException;
 import ru.gnivc.common.exception.KeycloakClientException;
 import ru.gnivc.common.exception.RealmRoleException;
 import ru.gnivc.common.exception.Response;
+import ru.gnivc.common.exception.TaskRouteServiceException;
 import ru.gnivc.common.exception.TaskServiceException;
 import ru.gnivc.common.exception.UserServiceException;
 
@@ -53,7 +54,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   }
 
   @ExceptionHandler(TaskServiceException.class)
-  protected ResponseEntity<Response> handleUserServiceException(TaskServiceException e) {
+  protected ResponseEntity<Response> handleTaskServiceException(TaskServiceException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
+  }
+
+  @ExceptionHandler(TaskRouteServiceException.class)
+  protected ResponseEntity<Response> handleTaskRouteServiceException(TaskRouteServiceException e) {
     return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 
