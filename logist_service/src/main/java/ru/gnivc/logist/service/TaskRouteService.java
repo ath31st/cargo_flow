@@ -30,7 +30,7 @@ public class TaskRouteService {
     return taskRouteMapper.toDto(getRoute(companyId, taskId, routeId));
   }
 
-  private TaskRoute getRoute(Integer companyId, Integer taskId, Integer routeId) {
+  public TaskRoute getRoute(Integer companyId, Integer taskId, Integer routeId) {
     final Optional<TaskRoute> optionalRoute =
         taskRouteRepository.findTaskRoute(companyId, taskId, routeId);
     return optionalRoute.orElseThrow(() -> new TaskRouteServiceException(HttpStatus.NOT_FOUND,
