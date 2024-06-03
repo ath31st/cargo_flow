@@ -40,7 +40,7 @@ public class TaskService {
     return taskMapper.toDto(t, companyId);
   }
 
-  private Task getTask(int companyId, int taskId) {
+  public Task getTask(int companyId, int taskId) {
     final Optional<Task> optionalTask = taskRepository.findByCompanyIdAndId(companyId, taskId);
     return optionalTask.orElseThrow(() -> new TaskServiceException(HttpStatus.NOT_FOUND,
         "Task with id: " + taskId + " not found"));

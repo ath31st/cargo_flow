@@ -7,14 +7,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.gnivc.logist.dto.NewTaskRouteReq;
 import ru.gnivc.logist.dto.TaskRouteDto;
+import ru.gnivc.logist.service.TaskRouteService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/logist/v1/{companyId}/tasks/{taskId}/routes")
 public class TaskRouteController {
+  private final TaskRouteService taskRouteService;
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
   @GetMapping("/{routeId}")
@@ -26,9 +30,10 @@ public class TaskRouteController {
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
   @PostMapping("/create-route")
-  public ResponseEntity<HttpStatus> createRoute(
-      @PathVariable Integer companyId, @PathVariable Integer taskId) {
-    taskRouteService.createTaskRoute(companyId, taskId);
+  public ResponseEntity<HttpStatus> createRoute(@PathVariable Integer companyId,
+                                                @PathVariable Integer taskId,
+                                                @RequestBody NewTaskRouteReq req) {
+    taskRouteService.createTaskRoute(companyId, taskId, req);
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
 }
