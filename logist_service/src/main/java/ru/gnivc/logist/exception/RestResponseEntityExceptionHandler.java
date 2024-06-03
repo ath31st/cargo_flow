@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.gnivc.common.exception.AbstractException;
 import ru.gnivc.common.exception.CompanyServiceException;
 import ru.gnivc.common.exception.CompanyVehicleServiceException;
+import ru.gnivc.common.exception.EventTypeException;
 import ru.gnivc.common.exception.KeycloakClientException;
 import ru.gnivc.common.exception.RealmRoleException;
 import ru.gnivc.common.exception.Response;
@@ -53,6 +54,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         .build();
 
     return new ResponseEntity<>(response, response.getStatus());
+  }
+
+  @ExceptionHandler(EventTypeException.class)
+  protected ResponseEntity<Response> handleEventTypeException(EventTypeException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 
   @ExceptionHandler(RouteEventServiceException.class)

@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.gnivc.common.event.EventType;
+import ru.gnivc.common.validator.EventTypeValidator;
 import ru.gnivc.logist.dto.NewTaskRouteReq;
 import ru.gnivc.logist.dto.TaskRouteDto;
 import ru.gnivc.logist.entity.RouteEvent;
@@ -34,11 +35,10 @@ public class TaskRouteMapper {
 
     String eventDescription = latestEvent.map(event -> {
       int eventTypeIndex = event.getEventType();
-      if (eventTypeIndex >= 0 && eventTypeIndex < EventType.values().length) {
-        return EventType.values()[eventTypeIndex].getDescription();
-      } else {
-        return "Invalid event type index";
-      }
+
+      EventTypeValidator.validateIndex(eventTypeIndex);
+
+      return EventType.values()[eventTypeIndex].getDescription();
     }).orElse("No event found");
 
     return TaskRouteDto.builder()
