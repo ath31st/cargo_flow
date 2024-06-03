@@ -1,6 +1,7 @@
 package ru.gnivc.common.client;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
@@ -23,6 +24,14 @@ public class PortalClient {
   public boolean validateDriverInCompany(int companyId, String driverId) {
     String url = String.format("%s/companies/%d/drivers/%s/validate",
         portalUrl, companyId, driverId);
-    return Boolean.TRUE.equals(restTemplate.getForObject(url, Boolean.class));
+    final ResponseEntity<Void> response = restTemplate.getForEntity(url, Void.class);
+    return response.getStatusCode().is2xxSuccessful();
+  }
+
+  public boolean validateVehicleInCompany(int companyId, int vehicleId) {
+    String url = String.format("%s/companies/%d/vehicles/%s/validate",
+        portalUrl, companyId, vehicleId);
+    final ResponseEntity<Void> response = restTemplate.getForEntity(url, Void.class);
+    return response.getStatusCode().is2xxSuccessful();
   }
 }
