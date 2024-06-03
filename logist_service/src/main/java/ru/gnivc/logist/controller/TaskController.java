@@ -20,19 +20,19 @@ import ru.gnivc.logist.service.TaskService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/logist/v1")
+@RequestMapping("/logist/v1/{companyId}/tasks")
 public class TaskController {
   private final TaskService taskService;
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
-  @GetMapping("/tasks/{companyId}/{taskId}")
+  @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTask(@PathVariable Integer companyId,
                                          @PathVariable int taskId) {
     return ResponseEntity.ok().body(taskService.getTaskDto(companyId, taskId));
   }
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
-  @PostMapping("/tasks/{companyId}/create-task")
+  @PostMapping("/create-task")
   public ResponseEntity<HttpStatus> createTask(
       @PathVariable Integer companyId, @RequestBody NewTaskReq req) {
     taskService.createTask(companyId, req);
@@ -40,7 +40,7 @@ public class TaskController {
   }
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
-  @GetMapping("/tasks/{companyId}/all")
+  @GetMapping("/all")
   public ResponseEntity<Page<TaskDto>> allCompanyTask(
       @RequestParam(defaultValue = "0") Integer pageNumber,
       @RequestParam(defaultValue = "10") Integer pageSize,
