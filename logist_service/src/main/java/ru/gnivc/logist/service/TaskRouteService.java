@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.event.EventType;
@@ -33,6 +35,11 @@ public class TaskRouteService {
         taskRouteRepository.findTaskRoute(companyId, taskId, routeId);
     return optionalRoute.orElseThrow(() -> new TaskRouteServiceException(HttpStatus.NOT_FOUND,
         "Task route with id: " + routeId + " not found"));
+  }
+
+  public Page<TaskRouteDto> getPageTaskRoute(Integer companyId, Integer taskId, Pageable pageable) {
+    return taskRouteRepository.findAllByCompanyIdAndTaskId(companyId, taskId, pageable)
+        .map(taskRouteMapper::toDto);
   }
 
   @Transactional
