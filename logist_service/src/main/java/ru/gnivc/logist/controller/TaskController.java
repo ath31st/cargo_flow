@@ -27,7 +27,7 @@ public class TaskController {
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
   @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTask(@PathVariable Integer companyId,
-                                         @PathVariable int taskId) {
+                                         @PathVariable Integer taskId) {
     return ResponseEntity.ok().body(taskService.getTaskDto(companyId, taskId));
   }
 
