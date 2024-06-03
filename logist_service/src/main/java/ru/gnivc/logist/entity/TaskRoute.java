@@ -1,5 +1,6 @@
 package ru.gnivc.logist.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -46,9 +47,9 @@ public class TaskRoute {
   @Column(name = "end_time")
   private Instant endTime;
 
-  @OneToMany(mappedBy = "route")
+  @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<RouteEvent> routeEvents = new LinkedHashSet<>();
 
-  @OneToMany(mappedBy = "route")
+  @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<RouteLocation> routeLocations = new LinkedHashSet<>();
 }
