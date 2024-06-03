@@ -1,5 +1,6 @@
 package ru.gnivc.logist.service;
 
+import java.time.Instant;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,20 @@ public class TaskService {
   private final TaskRepository taskRepository;
   private final PortalClient portalClient;
 
-
   public void createTask(int companyId, NewTaskReq newTask) {
+    boolean validateDriverInCompany
+        = portalClient.validateDriverInCompany(companyId, newTask.driverKeycloakId());
+    boolean validateVehicleInCompany
+        = portalClient.validateVehicleInCompany(companyId, newTask.companyVehicleId());
+
+    if (validateDriverInCompany && validateVehicleInCompany) {
+      saveTask(companyId, newTask);
+    } else {
+      throw new TaskServiceException(HttpStatus.BAD_REQUEST, "Task registration failed");
+    }
+  }
+
+  private void saveTask(int companyId, NewTaskReq newTask) {
 
     Task t = new Task();
     t.setStartPoint(newTask.startPoint());
@@ -27,6 +40,7 @@ public class TaskService {
     t.setCargoDescription(newTask.cargoDescription());
     t.setCompanyVehicleId(newTask.companyVehicleId());
     t.setCompanyId(companyId);
+    t.setCreatedAt(Instant.now());
 
     taskRepository.save(t);
   }
