@@ -1,10 +1,20 @@
 package ru.gnivc.common.event;
 
 public enum EventType {
-  ROUTE_CREATED,
-  ROUTE_STARTED,
-  ROUTE_ENDED,
-  ROUTE_CANCELLED,
-  MALFUNCTION,
-  ACCIDENT
+  ROUTE_CREATED("Рейс создан"),
+  ROUTE_STARTED("Рейс начат"),
+  ROUTE_ENDED("Рейс окончен"),
+  ROUTE_CANCELLED("Рейс отменен"),
+  MALFUNCTION("Поломка"),
+  ACCIDENT("Авария");
+
+  private final String description;
+
+  EventType(String description) {
+    this.description = description;
+  }
+
+  public String getDescription() {
+    return description;
+  }
 }
