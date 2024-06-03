@@ -1,6 +1,7 @@
 package ru.gnivc.gateway.config;
 
 import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
+import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
 import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
@@ -27,18 +28,30 @@ public class SecurityConfig {
         .cors(Customizer.withDefaults())
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
         .authorizeExchange(req -> {
-          req.pathMatchers("/openid-connect/**").permitAll();
+          req.pathMatchers(HttpMethod.POST, "openid-connect/**").permitAll();
 
-          req.pathMatchers("/portal/v1/users/roles").hasAuthority(REGISTRATOR.name());
-          req.pathMatchers("portal/v1/users/register-individual").permitAll();
-          req.pathMatchers("portal/v1/companies/register-company/*").hasAuthority(REGISTRATOR.name());
-          req.pathMatchers("portal/v1/companies/{companyId}/register-employee").hasAnyAuthority(ADMIN.name(), LOGIST.name());
-          req.pathMatchers("portal/v1/companies/{companyId}/register-vehicle").hasAnyAuthority(ADMIN.name(), LOGIST.name());
-          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}").hasAuthority(ADMIN.name());
+          // portal service - users
+          req.pathMatchers(HttpMethod.POST, "portal/v1/users/register-individual").permitAll();
+          req.pathMatchers(HttpMethod.GET, "portal/v1/users/roles").permitAll();
+
+          // portal service - companies
+          req.pathMatchers(HttpMethod.POST, "portal/v1/companies/register-company/*")
+              .hasAuthority(REGISTRATOR.name());
+          req.pathMatchers(HttpMethod.POST, "portal/v1/companies/{companyId}/register-employee")
+              .hasAnyAuthority(ADMIN.name(), LOGIST.name());
+          req.pathMatchers(HttpMethod.POST, "portal/v1/companies/{companyId}/register-vehicle")
+              .hasAnyAuthority(ADMIN.name(), LOGIST.name());
+          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}")
+              .hasAuthority(ADMIN.name());
           req.pathMatchers(HttpMethod.GET, "portal/v1/companies/all").hasAuthority(ADMIN.name());
-          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}/employees").hasAuthority(ADMIN.name());
+          req.pathMatchers(HttpMethod.GET, "portal/v1/companies/{companyId}/employees")
+              .hasAuthority(ADMIN.name());
 
+          // logist service
           req.pathMatchers("logist/v1/**").hasAuthority(LOGIST.name());
+
+          // driver service
+          req.pathMatchers("driver/v1/**").hasAuthority(DRIVER.name());
 
           req.anyExchange().authenticated();
         })

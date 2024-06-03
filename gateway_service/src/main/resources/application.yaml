@@ -32,6 +32,11 @@ spring:
           predicates:
             - Path=/logist/**
 
+        - id: driver
+          uri: lb://driver
+          predicates:
+            - Path=/driver/**
+
 logging:
   level:
     org:
