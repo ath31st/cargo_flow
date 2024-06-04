@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gnivc.logist.dto.NewTaskRouteReq;
-import ru.gnivc.logist.dto.TaskRouteDto;
+import ru.gnivc.common.dto.NewTaskRouteReq;
+import ru.gnivc.common.dto.TaskRouteDto;
 import ru.gnivc.logist.service.TaskRouteService;
 
 @RestController

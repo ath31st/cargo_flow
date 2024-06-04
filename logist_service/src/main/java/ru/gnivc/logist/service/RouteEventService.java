@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gnivc.common.validator.EventTypeValidator;
-import ru.gnivc.logist.dto.RouteEventDto;
+import ru.gnivc.common.dto.RouteEventDto;
 import ru.gnivc.logist.entity.RouteEvent;
 import ru.gnivc.logist.entity.TaskRoute;
 import ru.gnivc.logist.repository.RouteEventRepository;

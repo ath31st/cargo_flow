@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.gnivc.common.client.PortalClient;
 import ru.gnivc.logist.dto.NewTaskReq;
-import ru.gnivc.logist.dto.TaskDto;
+import ru.gnivc.common.dto.TaskDto;
 import ru.gnivc.logist.entity.Task;
 
 @Component

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import ru.gnivc.logist.dto.RouteLocationDto;
+import ru.gnivc.common.dto.RouteLocationDto;
 
 @Slf4j
 @Service

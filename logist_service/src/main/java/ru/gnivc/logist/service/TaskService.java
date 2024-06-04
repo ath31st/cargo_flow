@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import ru.gnivc.common.client.PortalClient;
 import ru.gnivc.common.exception.TaskServiceException;
 import ru.gnivc.logist.dto.NewTaskReq;
-import ru.gnivc.logist.dto.TaskDto;
+import ru.gnivc.common.dto.TaskDto;
 import ru.gnivc.logist.entity.Task;
 import ru.gnivc.logist.mapper.TaskMapper;
 import ru.gnivc.logist.repository.TaskRepository;

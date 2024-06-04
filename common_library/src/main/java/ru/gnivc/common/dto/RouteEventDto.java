@@ -1,4 +1,4 @@
-package ru.gnivc.logist.dto;
+package ru.gnivc.common.dto;
 
 public record RouteEventDto(
     Integer companyId,

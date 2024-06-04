@@ -1,4 +1,4 @@
-package ru.gnivc.logist.dto;
+package ru.gnivc.common.dto;
 
 import java.time.Instant;
 import lombok.Builder;
