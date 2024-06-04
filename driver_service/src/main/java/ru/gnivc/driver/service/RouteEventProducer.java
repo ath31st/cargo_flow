@@ -2,10 +2,12 @@ package ru.gnivc.driver.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.dto.RouteEventDto;
 
@@ -21,8 +23,17 @@ public class RouteEventProducer {
 
   public void sendMessage(RouteEventDto dto) throws JsonProcessingException {
     String routeEventAsMessage = objectMapper.writeValueAsString(dto);
-    kafkaTemplate.send(routeEventsTopic, routeEventAsMessage);
 
-    log.info("route event produced {}", routeEventAsMessage);
+    CompletableFuture<SendResult<String, String>> future
+        = kafkaTemplate.send(routeEventsTopic, routeEventAsMessage);
+
+    future.whenComplete((result, ex) -> {
+      if (ex == null) {
+        log.info("Sent message=[{}] with offset=[{}]", routeEventAsMessage,
+            result.getRecordMetadata().offset());
+      } else {
+        log.error("Unable to send message=[{}] due to : {}", routeEventAsMessage, ex.getMessage());
+      }
+    });
   }
 }

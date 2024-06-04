@@ -1,5 +1,6 @@
 package ru.gnivc.logist.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,10 @@ public class RouteEventConsumer {
 
   @KafkaListener(topics = {"${kafka.topic.route-events.name}"},
       groupId = "${kafka.topic.route-events.group}")
-  public void consumeMessage(String message) {
+  public void consumeMessage(String message) throws JsonProcessingException {
     log.info("message consumed {}", message);
 
-    RouteEventDto dto = objectMapper.convertValue(message, RouteEventDto.class);
+    RouteEventDto dto = objectMapper.readValue(message, RouteEventDto.class);
     routeEventService.saveRouteEvent(dto);
   }
 }
