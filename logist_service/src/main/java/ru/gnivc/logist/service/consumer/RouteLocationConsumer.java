@@ -1,11 +1,15 @@
-package ru.gnivc.logist.service;
+package ru.gnivc.logist.service.consumer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.dto.RouteLocationDto;
+import ru.gnivc.common.exception.RouteEventServiceException;
+import ru.gnivc.logist.service.RouteLocationService;
 
 @Slf4j
 @Service
@@ -19,7 +23,13 @@ public class RouteLocationConsumer {
   public void consumeMessage(String message) {
     log.info("message consumed {}", message);
 
-    RouteLocationDto dto = objectMapper.convertValue(message, RouteLocationDto.class);
-    routeLocationService.saveRouteLocation(dto);
+    try {
+      RouteLocationDto dto = objectMapper.readValue(message, RouteLocationDto.class);
+      routeLocationService.saveRouteLocation(dto);
+    } catch (JsonProcessingException e) {
+      log.error(e.getMessage());
+      throw new RouteEventServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
   }
 }

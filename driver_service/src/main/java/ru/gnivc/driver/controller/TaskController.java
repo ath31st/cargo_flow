@@ -25,7 +25,7 @@ public class TaskController {
 
 //  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
 //  @GetMapping("/all")
-//  public ResponseEntity<Page<TaskDto>> allCompanyTask(
+//  public ResponseEntity<Page<TaskDto>> allDriverTaskByCompany(
 //      @RequestParam(defaultValue = "0") Integer pageNumber,
 //      @RequestParam(defaultValue = "10") Integer pageSize,
 //      @PathVariable Integer companyId) {
