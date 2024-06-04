@@ -8,23 +8,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gnivc.common.dto.RouteEventDto;
-import ru.gnivc.driver.service.RouteEventProducer;
+import ru.gnivc.driver.service.RouteEventService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/driver/v1/companies/{companyId}/tasks/{taskId}/routes/{routeId}")
 public class RouteEventController {
-  private final RouteEventProducer routeEventProducer;
+  private final RouteEventService routeEventService;
 
   @PreAuthorize("@permissionValidator.hasCompanyDriverAccess(#companyId.toString())")
   @PostMapping("/create-event/{event-type}")
-  public ResponseEntity<HttpStatus> createRoute(@PathVariable Integer companyId,
-                                                @PathVariable Integer taskId,
-                                                @PathVariable Integer routeId,
-                                                @PathVariable("event-type") Integer eventType) {
-    RouteEventDto dto = new RouteEventDto(companyId, taskId, routeId, eventType);
-
+  public ResponseEntity<HttpStatus> createRouteEvent(@PathVariable Integer companyId,
+                                                     @PathVariable Integer taskId,
+                                                     @PathVariable Integer routeId,
+                                                     @PathVariable("event-type") Integer eventType) {
+    routeEventService.createRouteEvent(companyId, taskId, routeId, eventType);
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
 
