@@ -1,4 +1,4 @@
-package ru.gnivc.driver.config;
+package ru.gnivc.driver.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
