@@ -27,6 +27,14 @@ spring:
     clean-on-validation-error: true
     clean-disabled: false
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_URL:localhost:29092}
+
+kafka:
+  topic:
+    name: ${KAFKA_ROUTE_EVENTS_TOPIC_NAME:route_events_topic}
+    group: ${KAFKA_ROUTE_EVENTS_GROUP_NAME:route_events_group}
+
 eureka:
   client:
     serviceUrl:
