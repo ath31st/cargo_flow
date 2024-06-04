@@ -5,21 +5,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import ru.gnivc.logist.dto.RouteEventDto;
+import ru.gnivc.logist.dto.RouteLocationDto;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RouteEventConsumer {
-  private final RouteEventService routeEventService;
+public class RouteLocationConsumer {
+  private final RouteLocationService routeLocationService;
   private final ObjectMapper objectMapper;
 
-  @KafkaListener(topics = {"${kafka.topic.route-events.name}"},
-      groupId = "${kafka.topic.route-events.group}")
+  @KafkaListener(topics = {"${kafka.topic.route-locations.name}"},
+      groupId = "${kafka.topic.route-locations.group}")
   public void consumeMessage(String message) {
     log.info("message consumed {}", message);
 
-    RouteEventDto dto = objectMapper.convertValue(message, RouteEventDto.class);
-    routeEventService.saveRouteEvent(dto);
+    RouteLocationDto dto = objectMapper.convertValue(message, RouteLocationDto.class);
+    routeLocationService.saveRouteLocation(dto);
   }
 }
