@@ -24,7 +24,7 @@ public class RouteEventConsumer {
 
     try {
       RouteEventWrapper wrapper = objectMapper.readValue(message, RouteEventWrapper.class);
-      routeEventService.saveRouteEvent(wrapper);
+      routeEventService.createRouteEvent(wrapper);
     } catch (JsonProcessingException | TaskRouteServiceException e) {
       log.error(e.getMessage());
     }

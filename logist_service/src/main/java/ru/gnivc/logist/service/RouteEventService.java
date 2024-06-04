@@ -18,7 +18,7 @@ public class RouteEventService {
   private final TaskRouteService taskRouteService;
 
   @Transactional
-  public void saveRouteEvent(RouteEventWrapper wrapper) {
+  public void createRouteEvent(RouteEventWrapper wrapper) {
     RouteEventDto dto = wrapper.routeEventDto();
     TaskRoute tr = taskRouteService.getRoute(dto.companyId(), dto.taskId(), dto.taskRouteId());
 
@@ -28,6 +28,10 @@ public class RouteEventService {
 
     EventTypeValidator.validateIndex(dto.eventType());
 
+    saveRouteEvent(tr, dto);
+  }
+
+  private void saveRouteEvent(TaskRoute tr, RouteEventDto dto) {
     RouteEvent re = new RouteEvent();
     re.setRoute(tr);
     re.setEventType(dto.eventType());
