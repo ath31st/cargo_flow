@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "cargo-flow-starter")
 public class StarterProperties {
-  private String portalUrl;
+  private String portalUrl = "default_url";
 
   public void setPortalUrl(String portalUrl) {
     this.portalUrl = portalUrl;
