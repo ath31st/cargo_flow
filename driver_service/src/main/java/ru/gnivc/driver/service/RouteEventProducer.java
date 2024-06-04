@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import ru.gnivc.common.dto.RouteEventDto;
+import ru.gnivc.common.wrapper.RouteEventWrapper;
 
 @Slf4j
 @Service
@@ -21,8 +21,8 @@ public class RouteEventProducer {
   private final ObjectMapper objectMapper;
   private final KafkaTemplate<String, String> kafkaTemplate;
 
-  public void sendMessage(RouteEventDto dto) throws JsonProcessingException {
-    String routeEventAsMessage = objectMapper.writeValueAsString(dto);
+  public void sendMessage(RouteEventWrapper wrapper) throws JsonProcessingException {
+    String routeEventAsMessage = objectMapper.writeValueAsString(wrapper);
 
     CompletableFuture<SendResult<String, String>> future
         = kafkaTemplate.send(routeEventsTopic, routeEventAsMessage);

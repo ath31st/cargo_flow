@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import ru.gnivc.common.dto.RouteEventDto;
 import ru.gnivc.common.exception.TaskRouteServiceException;
+import ru.gnivc.common.wrapper.RouteEventWrapper;
 import ru.gnivc.logist.service.RouteEventService;
 
 @Slf4j
@@ -23,8 +23,8 @@ public class RouteEventConsumer {
     log.info("message consumed {}", message);
 
     try {
-      RouteEventDto dto = objectMapper.readValue(message, RouteEventDto.class);
-      routeEventService.saveRouteEvent(dto);
+      RouteEventWrapper wrapper = objectMapper.readValue(message, RouteEventWrapper.class);
+      routeEventService.saveRouteEvent(wrapper);
     } catch (JsonProcessingException | TaskRouteServiceException e) {
       log.error(e.getMessage());
     }

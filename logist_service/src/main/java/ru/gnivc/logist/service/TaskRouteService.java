@@ -9,10 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.gnivc.common.event.EventType;
-import ru.gnivc.common.exception.TaskRouteServiceException;
 import ru.gnivc.common.dto.NewTaskRouteReq;
 import ru.gnivc.common.dto.TaskRouteDto;
+import ru.gnivc.common.event.EventType;
+import ru.gnivc.common.exception.TaskRouteServiceException;
 import ru.gnivc.logist.entity.RouteEvent;
 import ru.gnivc.logist.entity.Task;
 import ru.gnivc.logist.entity.TaskRoute;
@@ -63,6 +63,15 @@ public class TaskRouteService {
             || e.getEventType().equals(EventType.ROUTE_CANCELLED.ordinal()))) {
       throw new TaskRouteServiceException(HttpStatus.BAD_REQUEST,
           "Task route already ended or cancelled");
+    }
+  }
+
+  public void checkExistingTaskRoute(Integer companyId, Integer taskId,
+                                     String driverId, Integer taskRouteId) {
+    if (!taskRouteRepository.existsByCompanyIdAndTaskIdAndDriverIdAndId(companyId, taskId,
+        driverId, taskRouteId)) {
+      throw new TaskRouteServiceException(HttpStatus.NOT_FOUND,
+          "Task route with this data not found");
     }
   }
 }

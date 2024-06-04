@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,8 @@ public class RouteEventController {
                                                      @PathVariable Integer taskId,
                                                      @PathVariable Integer routeId,
                                                      @PathVariable("event-type") Integer eventType) {
-    routeEventService.createRouteEvent(companyId, taskId, routeId, eventType);
+    String driverId = SecurityContextHolder.getContext().getAuthentication().getName();
+    routeEventService.createRouteEvent(companyId, taskId, routeId, eventType, driverId);
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
 

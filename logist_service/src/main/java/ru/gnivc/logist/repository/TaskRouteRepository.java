@@ -19,4 +19,10 @@ public interface TaskRouteRepository extends JpaRepository<TaskRoute, Integer> {
       + "inner join tr.task t "
       + "where t.companyId = ?1 and t.id = ?2")
   Page<TaskRoute> findAllByCompanyIdAndTaskId(int companyId, int taskId, Pageable pageable);
+
+  @Query("select count(tr) > 0 from TaskRoute tr "
+      + "inner join tr.task t "
+      + "where t.companyId = ?1 and t.id = ?2 and t.driverKeycloakId = ?3 and tr.id = ?4")
+  boolean existsByCompanyIdAndTaskIdAndDriverIdAndId(int companyId, int taskId,
+                                                     String driverId, int taskRouteId);
 }
