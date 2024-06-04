@@ -4,11 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.dto.RouteLocationDto;
-import ru.gnivc.common.exception.RouteEventServiceException;
+import ru.gnivc.common.exception.TaskRouteServiceException;
 import ru.gnivc.logist.service.RouteLocationService;
 
 @Slf4j
@@ -26,10 +25,8 @@ public class RouteLocationConsumer {
     try {
       RouteLocationDto dto = objectMapper.readValue(message, RouteLocationDto.class);
       routeLocationService.saveRouteLocation(dto);
-    } catch (JsonProcessingException e) {
+    } catch (JsonProcessingException | TaskRouteServiceException e) {
       log.error(e.getMessage());
-      throw new RouteEventServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
-
   }
 }
