@@ -1,6 +1,7 @@
 package ru.gnivc.common.validator;
 
 import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
+import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
 import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 
 import java.util.Optional;
@@ -33,6 +34,12 @@ public class PermissionValidator {
     Jwt principal = getCurrentPrincipal();
     final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
     return role.isPresent() && role.get() == LOGIST;
+  }
+
+  public boolean hasCompanyDriverAccess(String companyId) {
+    Jwt principal = getCurrentPrincipal();
+    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
+    return role.isPresent() && role.get() == DRIVER;
   }
 
   public boolean canRegisterEmployee(String companyId, String employeeRole) {
