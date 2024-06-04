@@ -2,3 +2,4 @@ ru.gnivc.starter.RestTemplateAutoConfiguration
 ru.gnivc.starter.PortalClientAutoConfiguration
 ru.gnivc.starter.LogistClientAutoConfiguration
 ru.gnivc.starter.PermissionValidatorAutoConfiguration
+ru.gnivc.starter.RestResponseEntityExceptionHandlerAutoConfiguration

@@ -8,7 +8,7 @@
  * limitations under the License.
  */
 
-package ru.gnivc.driver.exception;
+package ru.gnivc.starter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +41,7 @@ import ru.gnivc.common.exception.UserServiceException;
 
 @ControllerAdvice
 @RequiredArgsConstructor
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestResponseEntityExceptionHandlerAutoConfiguration extends ResponseEntityExceptionHandler {
   private final ObjectMapper mapper;
 
   @ExceptionHandler(HttpStatusCodeException.class)
