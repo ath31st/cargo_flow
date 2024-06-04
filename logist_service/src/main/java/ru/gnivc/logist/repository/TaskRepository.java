@@ -20,8 +20,10 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
       + "inner join t.taskRoutes tr "
       + "where t.companyId = ?1 "
       + "and (t.driverKeycloakId = ?2 or t.companyVehicleId = ?3) "
-      + "and exists (select count(re) > 0 from RouteEvent re "
-      + "where re.route.id = tr.id and re.eventType not in ?4)")
+      + "and exists (select re from RouteEvent re "
+      + "where re.route.id = tr.id "
+      + "and re.id = (select max(e.id) from RouteEvent e where e.route.id = tr.id) "
+      + "and re.eventType not in ?4)")
   boolean checkAvailabilityDriverAndVehicle(Integer companyId, String driverId,
                                             Integer vehicleId, List<Integer> eventTypes);
 }
