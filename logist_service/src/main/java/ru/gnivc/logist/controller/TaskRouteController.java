@@ -20,7 +20,7 @@ import ru.gnivc.logist.service.TaskRouteService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/logist/v1/{companyId}/tasks/{taskId}/routes")
+@RequestMapping("/logist/v1/companies/{companyId}/tasks/{taskId}/routes")
 public class TaskRouteController {
   private final TaskRouteService taskRouteService;
 
