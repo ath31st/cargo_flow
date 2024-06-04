@@ -55,4 +55,14 @@ public class TaskRouteService {
 
     taskRouteRepository.save(tr);
   }
+
+  public void checkTaskRouteNotEndedOrNotCancelled(TaskRoute tr) {
+    if (tr.getRouteEvents()
+        .stream()
+        .anyMatch(e -> e.getEventType().equals(EventType.ROUTE_ENDED.ordinal())
+            || e.getEventType().equals(EventType.ROUTE_CANCELLED.ordinal()))) {
+      throw new TaskRouteServiceException(HttpStatus.BAD_REQUEST,
+          "Task route already ended or cancelled");
+    }
+  }
 }

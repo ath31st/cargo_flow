@@ -1,6 +1,6 @@
 package ru.gnivc.logist.dto;
 
-public record NewRouteEventReq(
+public record RouteEventDto(
     Integer companyId,
     Integer taskId,
     Integer taskRouteId,
