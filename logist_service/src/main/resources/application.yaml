@@ -37,10 +37,6 @@ eureka:
 keycloak:
   auth-server-url: ${KEYCLOAK_URL:http://127.0.0.1:8080}
   realm: ${KEYCLOAK_REALM:cargo-flow}
-  client-id: ${KEYCLOAK_CLIENT_ID:logist-service}
-  username: ${KEYCLOAK_ADMIN_USERNAME:realm_admin}
-  password: ${KEYCLOAK_ADMIN_PASSWORD:1234}
-  client-secret: ${KEYCLOAK_CLIENT_SECRET:super-secret-logist-service-phrase}
 
 cargo-flow-starter:
   portal-url: http://portal/portal/v1
