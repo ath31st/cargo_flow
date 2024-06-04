@@ -8,6 +8,7 @@ import ru.gnivc.driver.dto.NewRouteLocationReq;
 import ru.gnivc.common.dto.RouteLocationDto;
 import ru.gnivc.common.exception.RouteEventServiceException;
 import ru.gnivc.common.wrapper.RouteLocationWrapper;
+import ru.gnivc.driver.service.producer.RouteLocationProducer;
 
 @Service
 @RequiredArgsConstructor

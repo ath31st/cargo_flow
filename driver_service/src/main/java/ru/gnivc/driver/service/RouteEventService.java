@@ -8,6 +8,7 @@ import ru.gnivc.common.dto.RouteEventDto;
 import ru.gnivc.common.exception.RouteEventServiceException;
 import ru.gnivc.common.validator.EventTypeValidator;
 import ru.gnivc.common.wrapper.RouteEventWrapper;
+import ru.gnivc.driver.service.producer.RouteEventProducer;
 
 @Service
 @RequiredArgsConstructor
