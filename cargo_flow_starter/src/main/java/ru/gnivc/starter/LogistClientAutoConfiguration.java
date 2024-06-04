@@ -15,6 +15,6 @@ public class LogistClientAutoConfiguration {
 
   @Bean
   public LogistClient logistClient(StarterProperties props, RestTemplate restTemplate) {
-    return new LogistClient(props.getPortalUrl(), restTemplate);
+    return new LogistClient(props.getLogistUrl(), restTemplate);
   }
 }
