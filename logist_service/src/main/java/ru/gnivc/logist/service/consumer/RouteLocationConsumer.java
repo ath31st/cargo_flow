@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import ru.gnivc.common.dto.RouteLocationDto;
 import ru.gnivc.common.exception.TaskRouteServiceException;
+import ru.gnivc.common.wrapper.RouteLocationWrapper;
 import ru.gnivc.logist.service.RouteLocationService;
 
 @Slf4j
@@ -23,8 +23,8 @@ public class RouteLocationConsumer {
     log.info("message consumed {}", message);
 
     try {
-      RouteLocationDto dto = objectMapper.readValue(message, RouteLocationDto.class);
-      routeLocationService.saveRouteLocation(dto);
+      RouteLocationWrapper wrapper = objectMapper.readValue(message, RouteLocationWrapper.class);
+      routeLocationService.createRouteLocation(wrapper);
     } catch (JsonProcessingException | TaskRouteServiceException e) {
       log.error(e.getMessage());
     }
