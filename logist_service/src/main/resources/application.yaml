@@ -55,6 +55,7 @@ keycloak:
 
 cargo-flow-starter:
   portal-url: http://portal/portal/v1
+  service-name: LOGIST_SERVICE
 
 logging:
   level:

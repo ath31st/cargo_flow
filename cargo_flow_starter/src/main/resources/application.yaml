@@ -5,3 +5,4 @@ spring:
 cargo-flow-starter:
   portal-url: default_url
   logist-url: default_url
+  service-name: default_name

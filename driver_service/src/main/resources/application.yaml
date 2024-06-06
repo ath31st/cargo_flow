@@ -39,6 +39,7 @@ keycloak:
 
 cargo-flow-starter:
   logist-url: http://logist/logist/v1
+  service-name: DRIVER_SERVICE
 
 logging:
   level:
