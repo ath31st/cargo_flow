@@ -2,7 +2,6 @@ package ru.gnivc.common.client;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.gnivc.common.dto.NewTaskRouteReq;
 import ru.gnivc.common.dto.TaskDto;

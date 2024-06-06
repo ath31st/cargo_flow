@@ -4,10 +4,13 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
 import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import ru.gnivc.common.exception.RealmRoleException;
 import ru.gnivc.common.role.KeycloakRealmRoles;
 import ru.gnivc.common.role.RoleExtractor;
@@ -16,6 +19,11 @@ public class PermissionValidator {
 
   private Jwt getCurrentPrincipal() {
     return (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
+
+  private HttpServletRequest getCurrentHttpRequest() {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    return attributes != null ? attributes.getRequest() : null;
   }
 
   public boolean hasCompanyAdminOrLogistAccess(String companyId) {
