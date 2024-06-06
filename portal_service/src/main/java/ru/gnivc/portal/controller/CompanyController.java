@@ -78,14 +78,18 @@ public class CompanyController {
     return ResponseEntity.ok().body(companyService.getEmployees(companyId));
   }
 
-  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @PreAuthorize("@permissionValidator.hasAccessByRolesOrServices(#companyId.toString(), " +
+      "T(java.util.Set).of(T(ru.gnivc.common.role.KeycloakRealmRoles).LOGIST), " +
+      "T(java.util.Set).of(T(ru.gnivc.common.service.ServiceNames).LOGIST_SERVICE))")
   @GetMapping("/{companyId}/vehicles/{vehicleId}/license-plate")
   public ResponseEntity<String> getCompanyVehicleLicensePlate(
       @PathVariable String companyId, @PathVariable Integer vehicleId) {
     return ResponseEntity.ok().body(companyVehicleService.getLicensePlate(companyId, vehicleId));
   }
 
-  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId)")
+  @PreAuthorize("@permissionValidator.hasAccessByRolesOrServices(#companyId.toString(), " +
+      "T(java.util.Set).of(T(ru.gnivc.common.role.KeycloakRealmRoles).LOGIST), " +
+      "T(java.util.Set).of(T(ru.gnivc.common.service.ServiceNames).LOGIST_SERVICE))")
   @GetMapping("/{companyId}/drivers/{driverId}/full-name")
   public ResponseEntity<String> getCompanyDriverFullName(
       @PathVariable String companyId, @PathVariable String driverId) {

@@ -24,7 +24,9 @@ import ru.gnivc.logist.service.TaskService;
 public class TaskController {
   private final TaskService taskService;
 
-  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
+  @PreAuthorize("@permissionValidator.hasAccessByRolesOrServices(#companyId.toString(), " +
+      "T(java.util.Set).of(T(ru.gnivc.common.role.KeycloakRealmRoles).LOGIST), " +
+      "T(java.util.Set).of(T(ru.gnivc.common.service.ServiceNames).DRIVER_SERVICE))")
   @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTask(@PathVariable Integer companyId,
                                          @PathVariable Integer taskId) {
