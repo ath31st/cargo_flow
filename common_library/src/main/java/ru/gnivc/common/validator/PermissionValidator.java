@@ -6,6 +6,7 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -14,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import ru.gnivc.common.exception.RealmRoleException;
 import ru.gnivc.common.role.KeycloakRealmRoles;
 import ru.gnivc.common.role.RoleExtractor;
+import ru.gnivc.common.service.ServiceNames;
 
 public class PermissionValidator {
 
@@ -21,21 +23,32 @@ public class PermissionValidator {
     return (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  private HttpServletRequest getCurrentHttpRequest() {
-    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    return attributes != null ? attributes.getRequest() : null;
+  private Optional<HttpServletRequest> getCurrentHttpRequest() {
+    ServletRequestAttributes attributes =
+        (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    return attributes != null ? Optional.of(attributes.getRequest()) : Optional.empty();
+  }
+
+  public boolean hasAccessByRolesOrServices(String companyId,
+                                            Set<KeycloakRealmRoles> roles,
+                                            Set<ServiceNames> services) {
+    Jwt principal = getCurrentPrincipal();
+    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
+    final Optional<HttpServletRequest> request = getCurrentHttpRequest();
+    if (request.isPresent() && request.get().getHeader("X-Service-name") != null) {
+      for (ServiceNames service : services) {
+        if (service.name().equals(request.get().getHeader("X-Service-name"))) {
+          return true;
+        }
+      }
+    }
+    return role.isPresent() && roles.contains(role.get());
   }
 
   public boolean hasCompanyAdminOrLogistAccess(String companyId) {
     Jwt principal = getCurrentPrincipal();
     final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
     return role.isPresent() && (role.get() == ADMIN || role.get() == LOGIST);
-  }
-
-  public boolean hasCompanyAdminAccess(String companyId) {
-    Jwt principal = getCurrentPrincipal();
-    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
-    return role.isPresent() && role.get() == ADMIN;
   }
 
   public boolean hasCompanyLogistAccess(String companyId) {
