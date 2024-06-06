@@ -10,4 +10,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class StarterProperties {
   private String portalUrl = "default_url";
   private String logistUrl = "default_url";
+  private String serviceName = "default_name";
 }
