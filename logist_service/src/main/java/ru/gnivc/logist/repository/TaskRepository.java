@@ -27,4 +27,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
       + "and re.eventType not in ?4))")
   boolean checkAvailabilityDriverAndVehicle(Integer companyId, String driverId,
                                             Integer vehicleId, List<Integer> eventTypes);
+
+  boolean existsByIdAndDriverKeycloakId(int taskId, String driverId);
 }

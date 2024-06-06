@@ -1,5 +1,7 @@
 package ru.gnivc.logist.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gnivc.logist.dto.NewTaskReq;
 import ru.gnivc.common.dto.TaskDto;
+import ru.gnivc.common.service.ServiceNameExtractor;
+import ru.gnivc.common.service.ServiceNames;
+import ru.gnivc.logist.dto.NewTaskReq;
 import ru.gnivc.logist.service.TaskService;
 
 @RestController
@@ -29,7 +33,12 @@ public class TaskController {
       "T(java.util.Set).of(T(ru.gnivc.common.service.ServiceNames).DRIVER_SERVICE))")
   @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTask(@PathVariable Integer companyId,
-                                         @PathVariable Integer taskId) {
+                                         @PathVariable Integer taskId,
+                                         HttpServletRequest request) {
+    Optional<ServiceNames> serviceName = ServiceNameExtractor.findServiceNameInHeaders(request);
+    if (serviceName.isPresent() && serviceName.get() == ServiceNames.DRIVER_SERVICE) {
+      taskService.checkDriverAccessToTask(taskId, request.getUserPrincipal().getName());
+    }
     return ResponseEntity.ok().body(taskService.getTaskDto(companyId, taskId));
   }
 

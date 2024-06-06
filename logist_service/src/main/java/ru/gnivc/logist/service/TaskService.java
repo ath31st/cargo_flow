@@ -11,9 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.client.PortalClient;
+import ru.gnivc.common.dto.TaskDto;
 import ru.gnivc.common.exception.TaskServiceException;
 import ru.gnivc.logist.dto.NewTaskReq;
-import ru.gnivc.common.dto.TaskDto;
 import ru.gnivc.logist.entity.Task;
 import ru.gnivc.logist.mapper.TaskMapper;
 import ru.gnivc.logist.repository.TaskRepository;
@@ -65,6 +65,13 @@ public class TaskService {
         List.of(ROUTE_ENDED.ordinal(), ROUTE_CANCELLED.ordinal()))) {
       throw new TaskServiceException(HttpStatus.CONFLICT,
           "The driver or car is already engaged in another task");
+    }
+  }
+
+  public void checkDriverAccessToTask(Integer taskId, String driverId) {
+    if (!taskRepository.existsByIdAndDriverKeycloakId(taskId, driverId)) {
+      throw new TaskServiceException(HttpStatus.BAD_REQUEST,
+          String.format("Driver with id: %s has no access to task with id: %d", driverId, taskId));
     }
   }
 }
