@@ -46,6 +46,9 @@ dadata:
   api-key: b1fa8ce0d9fdf1b859639fb00bca8cecd24bd502
   url: http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party
 
+cargo-flow-starter:
+  service-name: PORTAL_SERVICE
+
 logging:
   level:
     org:
