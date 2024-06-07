@@ -29,6 +29,20 @@ public class PermissionValidator {
     return attributes != null ? Optional.of(attributes.getRequest()) : Optional.empty();
   }
 
+  public boolean hasAccessByPermissionSet(String companyId, PermissionSet set) {
+    Jwt principal = getCurrentPrincipal();
+    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
+    final Optional<HttpServletRequest> request = getCurrentHttpRequest();
+    if (request.isPresent() && request.get().getHeader("X-Service-name") != null) {
+      for (ServiceNames service : set.services()) {
+        if (service.name().equals(request.get().getHeader("X-Service-name"))) {
+          return true;
+        }
+      }
+    }
+    return role.isPresent() && set.roles().contains(role.get());
+  }
+
   public boolean hasAccessByRolesOrServices(String companyId,
                                             Set<KeycloakRealmRoles> roles,
                                             Set<ServiceNames> services) {
