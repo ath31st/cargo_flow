@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.gnivc.common.dto.NewTaskRouteReq;
 import ru.gnivc.common.dto.RestResponsePage;
 import ru.gnivc.common.dto.RouteEventShortDto;
+import ru.gnivc.common.dto.RouteLocationShortDto;
 import ru.gnivc.common.dto.TaskDto;
 import ru.gnivc.common.dto.TaskRouteDto;
 
@@ -52,6 +53,23 @@ public class LogistClient {
         logistUrl, companyId, taskId, routeId, pageable.getPageNumber(), pageable.getPageSize());
 
     ResponseEntity<RestResponsePage<RouteEventShortDto>> response = restTemplate.exchange(
+        url,
+        HttpMethod.GET,
+        null,
+        new ParameterizedTypeReference<>() {
+        }
+    );
+
+    return response.getBody();
+  }
+
+  public Page<RouteLocationShortDto> getPageRouteLocations(Integer companyId, Integer taskId,
+                                                           Integer routeId, Pageable pageable) {
+    String url = String.format(
+        "%s/companies/%d/tasks/%d/routes/%d/all-locations?pageNumber=%d&pageSize=%d",
+        logistUrl, companyId, taskId, routeId, pageable.getPageNumber(), pageable.getPageSize());
+
+    ResponseEntity<RestResponsePage<RouteLocationShortDto>> response = restTemplate.exchange(
         url,
         HttpMethod.GET,
         null,
