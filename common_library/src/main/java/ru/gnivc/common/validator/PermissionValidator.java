@@ -6,7 +6,6 @@ import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -41,28 +40,6 @@ public class PermissionValidator {
       }
     }
     return role.isPresent() && set.roles().contains(role.get());
-  }
-
-  public boolean hasAccessByRolesOrServices(String companyId,
-                                            Set<KeycloakRealmRoles> roles,
-                                            Set<ServiceNames> services) {
-    Jwt principal = getCurrentPrincipal();
-    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
-    final Optional<HttpServletRequest> request = getCurrentHttpRequest();
-    if (request.isPresent() && request.get().getHeader("X-Service-name") != null) {
-      for (ServiceNames service : services) {
-        if (service.name().equals(request.get().getHeader("X-Service-name"))) {
-          return true;
-        }
-      }
-    }
-    return role.isPresent() && roles.contains(role.get());
-  }
-
-  public boolean hasCompanyAdminOrLogistAccess(String companyId) {
-    Jwt principal = getCurrentPrincipal();
-    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
-    return role.isPresent() && (role.get() == ADMIN || role.get() == LOGIST);
   }
 
   public boolean hasCompanyLogistAccess(String companyId) {

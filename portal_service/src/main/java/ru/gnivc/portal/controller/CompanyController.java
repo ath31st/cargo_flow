@@ -51,7 +51,7 @@ public class CompanyController {
   }
 
   @Transactional
-  @PreAuthorize("@permissionValidator.hasCompanyAdminOrLogistAccess(#companyId)")
+  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(#companyId, @adminLogist)")
   @PostMapping("/{companyId}/register-vehicle")
   public ResponseEntity<HttpStatus> registerVehicle(@PathVariable String companyId,
                                                     @RequestBody NewVehicleRegisterReq req) {
@@ -78,18 +78,16 @@ public class CompanyController {
     return ResponseEntity.ok().body(companyService.getEmployees(companyId));
   }
 
-  @PreAuthorize("@permissionValidator.hasAccessByRolesOrServices(#companyId.toString(), " +
-      "T(java.util.Set).of(T(ru.gnivc.common.role.KeycloakRealmRoles).LOGIST), " +
-      "T(java.util.Set).of(T(ru.gnivc.common.service.ServiceNames).LOGIST_SERVICE))")
+  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
+      "#companyId.toString(), @logistLogistService)")
   @GetMapping("/{companyId}/vehicles/{vehicleId}/license-plate")
   public ResponseEntity<String> getCompanyVehicleLicensePlate(
       @PathVariable String companyId, @PathVariable Integer vehicleId) {
     return ResponseEntity.ok().body(companyVehicleService.getLicensePlate(companyId, vehicleId));
   }
 
-  @PreAuthorize("@permissionValidator.hasAccessByRolesOrServices(#companyId.toString(), " +
-      "T(java.util.Set).of(T(ru.gnivc.common.role.KeycloakRealmRoles).LOGIST), " +
-      "T(java.util.Set).of(T(ru.gnivc.common.service.ServiceNames).LOGIST_SERVICE))")
+  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
+      "#companyId.toString(), @logistLogistService)")
   @GetMapping("/{companyId}/drivers/{driverId}/full-name")
   public ResponseEntity<String> getCompanyDriverFullName(
       @PathVariable String companyId, @PathVariable String driverId) {

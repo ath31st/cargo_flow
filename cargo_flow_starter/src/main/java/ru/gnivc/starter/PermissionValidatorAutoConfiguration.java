@@ -1,5 +1,6 @@
 package ru.gnivc.starter;
 
+import java.util.Collections;
 import java.util.Set;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -30,5 +31,11 @@ public class PermissionValidatorAutoConfiguration {
     Set<KeycloakRealmRoles> roles = Set.of(KeycloakRealmRoles.LOGIST);
     Set<ServiceNames> services = Set.of(ServiceNames.DRIVER_SERVICE);
     return new PermissionSet(roles, services);
+  }
+
+  @Bean
+  public PermissionSet adminLogist() {
+    Set<KeycloakRealmRoles> roles = Set.of(KeycloakRealmRoles.LOGIST, KeycloakRealmRoles.ADMIN);
+    return new PermissionSet(roles, Collections.emptySet());
   }
 }
