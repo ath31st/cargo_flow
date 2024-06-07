@@ -1,5 +1,8 @@
 package ru.gnivc.logist.service;
 
+import static ru.gnivc.common.event.EventType.ROUTE_CANCELLED;
+import static ru.gnivc.common.event.EventType.ROUTE_ENDED;
+
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gnivc.common.dto.RouteEventDto;
 import ru.gnivc.common.dto.RouteEventShortDto;
+import ru.gnivc.common.event.EventType;
 import ru.gnivc.common.validator.EventTypeValidator;
 import ru.gnivc.common.wrapper.RouteEventWrapper;
 import ru.gnivc.logist.entity.RouteEvent;
@@ -34,6 +38,10 @@ public class RouteEventService {
     taskRouteService.checkTaskRouteNotEndedOrNotCancelled(tr);
 
     EventTypeValidator.validateIndex(dto.eventType());
+    EventType eventType = EventType.values()[dto.eventType()];
+    if (eventType == ROUTE_ENDED || eventType == ROUTE_CANCELLED) {
+      tr.setEndTime(Instant.now());
+    }
 
     saveRouteEvent(tr, dto);
   }
