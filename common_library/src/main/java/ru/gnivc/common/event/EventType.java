@@ -1,5 +1,8 @@
 package ru.gnivc.common.event;
 
+import lombok.Getter;
+
+@Getter
 public enum EventType {
   ROUTE_CREATED("Рейс создан"),
   ROUTE_STARTED("Рейс начат"),
@@ -12,9 +15,5 @@ public enum EventType {
 
   EventType(String description) {
     this.description = description;
-  }
-
-  public String getDescription() {
-    return description;
   }
 }
