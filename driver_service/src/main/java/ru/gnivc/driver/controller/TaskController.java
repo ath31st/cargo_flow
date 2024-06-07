@@ -22,14 +22,4 @@ public class TaskController {
                                          @PathVariable Integer taskId) {
     return ResponseEntity.ok().body(logistClient.getTaskDtoById(companyId, taskId));
   }
-
-//  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
-//  @GetMapping("/all")
-//  public ResponseEntity<Page<TaskDto>> allDriverTaskByCompany(
-//      @RequestParam(defaultValue = "0") Integer pageNumber,
-//      @RequestParam(defaultValue = "10") Integer pageSize,
-//      @PathVariable Integer companyId) {
-//    Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//    return ResponseEntity.ok().body(taskService.getPageTask(companyId, pageable));
-//  }
 }
