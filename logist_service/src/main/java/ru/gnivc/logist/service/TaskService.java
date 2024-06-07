@@ -3,6 +3,7 @@ package ru.gnivc.logist.service;
 import static ru.gnivc.common.event.EventType.ROUTE_CANCELLED;
 import static ru.gnivc.common.event.EventType.ROUTE_ENDED;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import ru.gnivc.common.client.PortalClient;
 import ru.gnivc.common.dto.TaskDto;
 import ru.gnivc.common.exception.TaskServiceException;
+import ru.gnivc.common.service.ServiceNameExtractor;
+import ru.gnivc.common.service.ServiceNames;
 import ru.gnivc.logist.dto.NewTaskReq;
 import ru.gnivc.logist.entity.Task;
 import ru.gnivc.logist.mapper.TaskMapper;
@@ -68,10 +71,17 @@ public class TaskService {
     }
   }
 
-  public void checkDriverAccessToTask(Integer taskId, String driverId) {
+  private void checkDriverAccessToTask(Integer taskId, String driverId) {
     if (!taskRepository.existsByIdAndDriverKeycloakId(taskId, driverId)) {
       throw new TaskServiceException(HttpStatus.BAD_REQUEST,
           String.format("Driver with id: %s has no access to task with id: %d", driverId, taskId));
+    }
+  }
+
+  public void checkRequestFromDriverService(Integer taskId, HttpServletRequest request) {
+    Optional<ServiceNames> serviceName = ServiceNameExtractor.findServiceNameInHeaders(request);
+    if (serviceName.isPresent() && serviceName.get() == ServiceNames.DRIVER_SERVICE) {
+      checkDriverAccessToTask(taskId, request.getUserPrincipal().getName());
     }
   }
 }

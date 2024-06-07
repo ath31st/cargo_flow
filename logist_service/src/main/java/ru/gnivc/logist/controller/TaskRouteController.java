@@ -1,5 +1,6 @@
 package ru.gnivc.logist.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.gnivc.common.dto.NewTaskRouteReq;
 import ru.gnivc.common.dto.TaskRouteDto;
 import ru.gnivc.logist.service.TaskRouteService;
+import ru.gnivc.logist.service.TaskService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/logist/v1/companies/{companyId}/tasks/{taskId}/routes")
 public class TaskRouteController {
   private final TaskRouteService taskRouteService;
+  private final TaskService taskService;
 
   @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
   @GetMapping("/{routeId}")
@@ -32,11 +35,14 @@ public class TaskRouteController {
     return ResponseEntity.ok().body(taskRouteService.getRouteDto(companyId, taskId, routeId));
   }
 
-  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
+  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
+      "#companyId.toString(), @logistDriverService)")
   @PostMapping("/create-route")
   public ResponseEntity<HttpStatus> createRoute(@PathVariable Integer companyId,
                                                 @PathVariable Integer taskId,
-                                                @RequestBody NewTaskRouteReq req) {
+                                                @RequestBody NewTaskRouteReq req,
+                                                HttpServletRequest request) {
+    taskService.checkRequestFromDriverService(taskId, request);
     taskRouteService.createTaskRoute(companyId, taskId, req);
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
