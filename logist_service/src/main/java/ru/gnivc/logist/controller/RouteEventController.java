@@ -1,5 +1,6 @@
 package ru.gnivc.logist.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gnivc.common.dto.RouteEventShortDto;
 import ru.gnivc.logist.service.RouteEventService;
+import ru.gnivc.logist.service.TaskService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/logist/v1/companies/{companyId}/tasks/{taskId}/routes/{routeId}")
 public class RouteEventController {
   private final RouteEventService routeEventService;
+  private final TaskService taskService;
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
       "#companyId.toString(), @logistDriverService)")
@@ -28,7 +31,9 @@ public class RouteEventController {
       @RequestParam(defaultValue = "10") Integer pageSize,
       @PathVariable Integer companyId,
       @PathVariable Integer taskId,
-      @PathVariable Integer routeId) {
+      @PathVariable Integer routeId,
+      HttpServletRequest request) {
+    taskService.checkRequestFromDriverService(taskId, request);
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.ok().body(
         routeEventService.getPageRouteEvents(companyId, taskId, routeId, pageable));
