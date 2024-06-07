@@ -47,13 +47,16 @@ public class TaskRouteController {
     return ResponseEntity.ok(HttpStatus.CREATED);
   }
 
-  @PreAuthorize("@permissionValidator.hasCompanyLogistAccess(#companyId.toString())")
+  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
+      "#companyId.toString(), @logistDriverService)")
   @GetMapping("/all")
   public ResponseEntity<Page<TaskRouteDto>> allTaskRoutes(
       @RequestParam(defaultValue = "0") Integer pageNumber,
       @RequestParam(defaultValue = "10") Integer pageSize,
       @PathVariable Integer companyId,
-      @PathVariable Integer taskId) {
+      @PathVariable Integer taskId,
+      HttpServletRequest request) {
+    taskService.checkRequestFromDriverService(taskId, request);
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.ok().body(taskRouteService.getPageTaskRoute(companyId, taskId, pageable));
   }
