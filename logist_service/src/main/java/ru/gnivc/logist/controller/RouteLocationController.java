@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gnivc.common.dto.RouteEventShortDto;
+import ru.gnivc.common.dto.RouteLocationShortDto;
 import ru.gnivc.logist.service.RouteLocationService;
 import ru.gnivc.logist.service.TaskService;
 
@@ -26,7 +26,7 @@ public class RouteLocationController {
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
       "#companyId.toString(), @logistDriverService)")
   @GetMapping("/all-locations")
-  public ResponseEntity<Page<RouteEventShortDto>> allRouteLocations(
+  public ResponseEntity<Page<RouteLocationShortDto>> allRouteLocations(
       @RequestParam(defaultValue = "0") Integer pageNumber,
       @RequestParam(defaultValue = "10") Integer pageSize,
       @PathVariable Integer companyId,
