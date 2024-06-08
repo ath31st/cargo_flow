@@ -88,11 +88,26 @@ services:
     restart: on-failure
     volumes:
       - "database:/var/lib/postgresql/data"
-      - "./sql_scripts/init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql"
+      - "./scripts/init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql"
+
+  mongodb-container:
+    image: mongo:7.0.11
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - "./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js"
+      - "mongodb_data:/data/db"
+    networks:
+      - test_network
 
 networks:
   test_network:
 
 volumes:
   database:
+  mongodb_data:
   minio:
