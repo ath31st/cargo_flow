@@ -26,7 +26,7 @@ public class SchedulerConfig {
   private final ObjectMapper objectMapper;
 
   @Scheduled(fixedRate = 10000, initialDelay = 5000)
-  private void test() {
+  private void sendStatistics() {
     try {
       List<Integer> companyIds = portalClient.getCompanyIds();
       if (!companyIds.isEmpty()) {
