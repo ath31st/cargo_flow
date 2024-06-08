@@ -32,6 +32,9 @@ spring:
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    producer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
 
 kafka:
   topic:
@@ -41,6 +44,9 @@ kafka:
     route-locations:
       name: ${KAFKA_ROUTE_LOCATIONS_TOPIC_NAME:route_locations_topic}
       group: ${KAFKA_ROUTE_LOCATIONS_GROUP_NAME:route_locations_group}
+    company_statistics:
+      name: ${KAFKA_COMPANY_STATISTICS_TOPIC_NAME:company_statistics_topic}
+      group: ${KAFKA_COMPANY_STATISTICS_GROUP_NAME:company_statistics_group}
 
 eureka:
   client:
