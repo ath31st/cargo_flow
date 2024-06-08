@@ -11,21 +11,14 @@ spring:
         jwt:
           jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
 
-  jpa:
-    database: POSTGRESQL
-    show-sql: false
-    hibernate:
-      ddl-auto: validate
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:cargo_flow_db}?currentSchema=dwh_schema
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
-    driverClassName: org.postgresql.Driver
-
-  flyway:
-    clean-on-validation-error: true
-    clean-disabled: false
+  data:
+    mongodb:
+      host: ${MONGO_DB_HOST:localhost}
+      port: ${MONGO_DB_PORT:27017}
+      database: ${MONGO_DB_NAME:statistics}
+      auto-index-creation: true
+      username: ${MONGO_DB_USERNAME:mongo}
+      password: ${MONGO_DB_PASSWORD:mongo}
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_URL:localhost:29092}
