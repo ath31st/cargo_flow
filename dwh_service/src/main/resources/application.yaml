@@ -15,7 +15,7 @@ spring:
     mongodb:
       host: ${MONGO_DB_HOST:localhost}
       port: ${MONGO_DB_PORT:27017}
-      database: ${MONGO_DB_NAME:statistics}
+      database: ${MONGO_DB_NAME:cargo_flow_db}
       auto-index-creation: true
       username: ${MONGO_DB_USERNAME:mongo}
       password: ${MONGO_DB_PASSWORD:mongo}
