@@ -31,6 +31,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
   boolean existsByIdAndDriverKeycloakId(int taskId, String driverId);
 
   @Query("select count(t) from Task t "
-      + "where t.companyId = ?1 and DATE(t.createdAt) = CURRENT_DATE")
+      + "where t.companyId = ?1 and t.createdAt >= CURRENT_DATE")
   int countByCompanyIdAndCreatedAtToday(int companyId);
 }

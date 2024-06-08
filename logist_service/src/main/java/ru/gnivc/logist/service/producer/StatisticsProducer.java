@@ -10,14 +10,11 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import ru.gnivc.common.wrapper.StatisticsWrapper;
-import ru.gnivc.logist.service.StatisticsService;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class StatisticsProducer {
-  private final StatisticsService statisticsService;
-
   @Value("${kafka.topic.company_statistics.name}")
   private String companyStatisticsTopic;
 
