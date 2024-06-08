@@ -37,6 +37,11 @@ spring:
           predicates:
             - Path=/driver/**
 
+        - id: dwh
+          uri: lb://dwh
+          predicates:
+            - Path=/dwh/**
+
 logging:
   level:
     org:
