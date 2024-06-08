@@ -28,6 +28,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.gnivc.common.exception.AbstractException;
 import ru.gnivc.common.exception.CompanyServiceException;
+import ru.gnivc.common.exception.CompanyStatisticsServiceException;
 import ru.gnivc.common.exception.CompanyVehicleServiceException;
 import ru.gnivc.common.exception.EventTypeException;
 import ru.gnivc.common.exception.KeycloakClientException;
@@ -58,6 +59,12 @@ public class RestResponseEntityExceptionHandlerAutoConfiguration extends Respons
 
   @ExceptionHandler(EventTypeException.class)
   protected ResponseEntity<Response> handleEventTypeException(EventTypeException e) {
+    return new ResponseEntity<>(buildResponse(e), e.getStatus());
+  }
+
+  @ExceptionHandler(CompanyStatisticsServiceException.class)
+  protected ResponseEntity<Response> handleCompanyStatisticsException(
+      CompanyStatisticsServiceException e) {
     return new ResponseEntity<>(buildResponse(e), e.getStatus());
   }
 
