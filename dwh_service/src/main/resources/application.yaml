@@ -28,9 +28,9 @@ spring:
 
 kafka:
   topic:
-    route-events:
-      name: ${KAFKA_ROUTE_EVENTS_TOPIC_NAME:company_statistics_topic}
-      group: ${KAFKA_ROUTE_EVENTS_GROUP_NAME:company_statistics_group}
+    company_statistics:
+      name: ${KAFKA_COMPANY_STATISTICS_TOPIC_NAME:company_statistics_topic}
+      group: ${KAFKA_COMPANY_STATISTICS_GROUP_NAME:company_statistics_group}
 
 eureka:
   client:
