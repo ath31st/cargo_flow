@@ -5,6 +5,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -20,8 +21,22 @@ public class TokenInterceptor implements ClientHttpRequestInterceptor {
     return execution.execute(request, body);
   }
 
-  private String getToken() {
+  private String getTokenz() {
     Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return jwt != null ? jwt.getTokenValue() : null;
+  }
+
+  public static String getToken() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+      return null;
+    }
+
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof Jwt jwt) {
+      return jwt.getTokenValue();
+    }
+
+    return null;
   }
 }
