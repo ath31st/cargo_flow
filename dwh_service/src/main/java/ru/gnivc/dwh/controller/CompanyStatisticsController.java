@@ -16,7 +16,7 @@ public class CompanyStatisticsController {
   private final CompanyStatisticsService companyStatisticsService;
 
   @GetMapping("/statistics")
-  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(#companyId, @adminLogist)")
+  @PreAuthorize("@permissionValidator.hasCompanyAdminAccess(#companyId)")
   public ResponseEntity<String> getCompanyStatistics(@PathVariable Integer companyId) {
     return ResponseEntity.ok(companyStatisticsService.getStatistics(companyId));
   }

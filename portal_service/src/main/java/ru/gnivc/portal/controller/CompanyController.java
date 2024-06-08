@@ -51,7 +51,7 @@ public class CompanyController {
   }
 
   @Transactional
-  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(#companyId, @adminLogist)")
+  @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(#companyId, @adminOrLogist)")
   @PostMapping("/{companyId}/register-vehicle")
   public ResponseEntity<HttpStatus> registerVehicle(@PathVariable String companyId,
                                                     @RequestBody NewVehicleRegisterReq req) {
@@ -79,7 +79,7 @@ public class CompanyController {
   }
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistLogistService)")
+      "#companyId.toString(), @logistOrLogistService)")
   @GetMapping("/{companyId}/vehicles/{vehicleId}/license-plate")
   public ResponseEntity<String> getCompanyVehicleLicensePlate(
       @PathVariable String companyId, @PathVariable Integer vehicleId) {
@@ -87,7 +87,7 @@ public class CompanyController {
   }
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistLogistService)")
+      "#companyId.toString(), @logistOrLogistService)")
   @GetMapping("/{companyId}/drivers/{driverId}/full-name")
   public ResponseEntity<String> getCompanyDriverFullName(
       @PathVariable String companyId, @PathVariable String driverId) {

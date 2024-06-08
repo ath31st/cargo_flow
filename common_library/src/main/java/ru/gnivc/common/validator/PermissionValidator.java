@@ -48,6 +48,12 @@ public class PermissionValidator {
     return role.isPresent() && role.get() == LOGIST;
   }
 
+  public boolean hasCompanyAdminAccess(String companyId) {
+    Jwt principal = getCurrentPrincipal();
+    final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
+    return role.isPresent() && role.get() == ADMIN;
+  }
+
   public boolean hasCompanyDriverAccess(String companyId) {
     Jwt principal = getCurrentPrincipal();
     final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);

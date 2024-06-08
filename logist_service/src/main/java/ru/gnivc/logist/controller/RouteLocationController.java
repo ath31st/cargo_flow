@@ -24,7 +24,7 @@ public class RouteLocationController {
   private final TaskService taskService;
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistDriverService)")
+      "#companyId.toString(), @logistOrDriverService)")
   @GetMapping("/all-locations")
   public ResponseEntity<Page<RouteLocationShortDto>> allRouteLocations(
       @RequestParam(defaultValue = "0") Integer pageNumber,

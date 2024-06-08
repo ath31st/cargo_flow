@@ -24,7 +24,7 @@ public class RouteEventController {
   private final TaskService taskService;
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistDriverService)")
+      "#companyId.toString(), @logistOrDriverService)")
   @GetMapping("/all-events")
   public ResponseEntity<Page<RouteEventShortDto>> allRouteEvents(
       @RequestParam(defaultValue = "0") Integer pageNumber,

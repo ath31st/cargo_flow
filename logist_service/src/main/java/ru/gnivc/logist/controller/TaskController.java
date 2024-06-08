@@ -26,7 +26,7 @@ public class TaskController {
   private final TaskService taskService;
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistDriverService)")
+      "#companyId.toString(), @logistOrDriverService)")
   @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTask(@PathVariable Integer companyId,
                                          @PathVariable Integer taskId,

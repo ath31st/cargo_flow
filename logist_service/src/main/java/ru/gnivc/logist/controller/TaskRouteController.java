@@ -36,7 +36,7 @@ public class TaskRouteController {
   }
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistDriverService)")
+      "#companyId.toString(), @logistOrDriverService)")
   @PostMapping("/create-route")
   public ResponseEntity<HttpStatus> createRoute(@PathVariable Integer companyId,
                                                 @PathVariable Integer taskId,
@@ -48,7 +48,7 @@ public class TaskRouteController {
   }
 
   @PreAuthorize("@permissionValidator.hasAccessByPermissionSet(" +
-      "#companyId.toString(), @logistDriverService)")
+      "#companyId.toString(), @logistOrDriverService)")
   @GetMapping("/all")
   public ResponseEntity<Page<TaskRouteDto>> allTaskRoutes(
       @RequestParam(defaultValue = "0") Integer pageNumber,

@@ -20,21 +20,21 @@ public class PermissionValidatorAutoConfiguration {
   }
 
   @Bean
-  public PermissionSet logistLogistService() {
+  public PermissionSet logistOrLogistService() {
     Set<KeycloakRealmRoles> roles = Set.of(KeycloakRealmRoles.LOGIST);
     Set<ServiceNames> services = Set.of(ServiceNames.LOGIST_SERVICE);
     return new PermissionSet(roles, services);
   }
 
   @Bean
-  public PermissionSet logistDriverService() {
+  public PermissionSet logistOrDriverService() {
     Set<KeycloakRealmRoles> roles = Set.of(KeycloakRealmRoles.LOGIST);
     Set<ServiceNames> services = Set.of(ServiceNames.DRIVER_SERVICE);
     return new PermissionSet(roles, services);
   }
 
   @Bean
-  public PermissionSet adminLogist() {
+  public PermissionSet adminOrLogist() {
     Set<KeycloakRealmRoles> roles = Set.of(KeycloakRealmRoles.LOGIST, KeycloakRealmRoles.ADMIN);
     return new PermissionSet(roles, Collections.emptySet());
   }
