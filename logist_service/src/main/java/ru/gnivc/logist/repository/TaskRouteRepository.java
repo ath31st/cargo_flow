@@ -30,6 +30,7 @@ public interface TaskRouteRepository extends JpaRepository<TaskRoute, Integer> {
       + "inner join tr.task t "
       + "inner join tr.routeEvents re "
       + "where t.companyId = ?1 "
+      + "and tr.createdAt >= CURRENT_DATE "
       + "and re.id = (select max(e.id) from RouteEvent e where e.route.id = tr.id) "
       + "and re.eventType = ?2")
   int countByCompanyIdAndLastEventType(int companyId, int lastEventType);
