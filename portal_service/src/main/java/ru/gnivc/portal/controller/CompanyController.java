@@ -73,6 +73,12 @@ public class CompanyController {
     return ResponseEntity.ok().body(companyService.getCompanies(pageable));
   }
 
+  @PreAuthorize("@permissionValidator.isLogistService()")
+  @GetMapping("/all-ids")
+  public ResponseEntity<List<Integer>> allCompanyIds() {
+    return ResponseEntity.ok().body(companyService.getCompanyIds());
+  }
+
   @GetMapping("/{companyId}/employees")
   public ResponseEntity<List<String>> companyEmployees(@PathVariable String companyId) {
     return ResponseEntity.ok().body(companyService.getEmployees(companyId));

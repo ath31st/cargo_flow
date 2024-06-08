@@ -84,6 +84,10 @@ public class CompanyService {
         .build();
   }
 
+  public List<Integer> getCompanyIds() {
+    return companyRepository.findAllCompanyIds();
+  }
+
   public Page<CompanyShortDto> getCompanies(Pageable pageable) {
     return companyRepository.findAll(pageable)
         .map(c -> new CompanyShortDto(c.getId(), c.getName(), c.getInn()));
