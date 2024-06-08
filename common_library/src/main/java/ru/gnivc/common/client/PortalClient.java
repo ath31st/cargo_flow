@@ -1,6 +1,9 @@
 package ru.gnivc.common.client;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,5 +36,17 @@ public class PortalClient {
         portalUrl, companyId, vehicleId);
     final ResponseEntity<Void> response = restTemplate.getForEntity(url, Void.class);
     return response.getStatusCode().is2xxSuccessful();
+  }
+
+  public List<Integer> getCompanyIds() {
+    String url = String.format("%s/companies/all-ids", portalUrl);
+    ResponseEntity<List<Integer>> response = restTemplate.exchange(
+        url,
+        HttpMethod.GET,
+        null,
+        new ParameterizedTypeReference<>() {
+        }
+    );
+    return response.getBody();
   }
 }

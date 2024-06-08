@@ -42,6 +42,15 @@ public class PermissionValidator {
     return role.isPresent() && set.roles().contains(role.get());
   }
 
+  public boolean isLogistService() {
+    final Optional<HttpServletRequest> request = getCurrentHttpRequest();
+    if (request.isPresent() && request.get().getHeader("X-Service-name") != null) {
+      return ServiceNames.LOGIST_SERVICE.name().equals(
+          request.get().getHeader("X-Service-name"));
+    }
+    return false;
+  }
+
   public boolean hasCompanyLogistAccess(String companyId) {
     Jwt principal = getCurrentPrincipal();
     final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
