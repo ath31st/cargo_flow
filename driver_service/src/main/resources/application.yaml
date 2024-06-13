@@ -21,10 +21,8 @@ kafka:
   topic:
     route-events:
       name: ${KAFKA_ROUTE_EVENTS_TOPIC_NAME:route_events_topic}
-      group: ${KAFKA_ROUTE_EVENTS_GROUP_NAME:route_events_group}
     route-locations:
       name: ${KAFKA_ROUTE_LOCATIONS_TOPIC_NAME:route_locations_topic}
-      group: ${KAFKA_ROUTE_LOCATIONS_GROUP_NAME:route_locations_group}
 
 eureka:
   client:
