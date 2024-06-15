@@ -1,5 +1,8 @@
 package ru.gnivc.portal.service;
 
+import static ru.gnivc.common.constants.StringConstants.NOT_FOUND;
+import static ru.gnivc.common.constants.StringConstants.USER_WITH_EMAIL;
+import static ru.gnivc.common.constants.StringConstants.USER_WITH_ID;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REALM_ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.REGISTRATOR;
 
@@ -170,7 +173,7 @@ public class UserService {
 
     if (!id.equals(userId)) {
       throw new UserServiceException(HttpStatus.BAD_REQUEST,
-          "User with id " + userId + " mismatch with user founded by email");
+          USER_WITH_ID.getValue() + userId + " mismatch with user founded by email");
     }
 
     CredentialRepresentation newCredentials = createPasswordCredentials(newPassword);
@@ -194,7 +197,8 @@ public class UserService {
   private UserRepresentation getUserRepByEmail(String email) {
     List<UserRepresentation> users = getUsersResource().searchByEmail(email, true);
     if (users.isEmpty()) {
-      throw new UserServiceException(HttpStatus.NOT_FOUND, "User with email " + email + " not found");
+      throw new UserServiceException(HttpStatus.NOT_FOUND,
+          USER_WITH_EMAIL.getValue() + email + NOT_FOUND.getValue());
     }
     return users.get(0);
   }
@@ -213,7 +217,7 @@ public class UserService {
         .searchByEmail(email.toLowerCase().trim(), exact);
     if (!users.isEmpty()) {
       throw new UserServiceException(
-          HttpStatus.CONFLICT, "User with email " + email + " already exists");
+          HttpStatus.CONFLICT, USER_WITH_EMAIL.getValue() + email + " already exists");
     }
   }
 
@@ -230,7 +234,7 @@ public class UserService {
       addAttributeRoleToUser(userId, role.getAttributeName(), companyId);
     } else {
       throw new UserServiceException(
-          HttpStatus.NOT_FOUND, "User with email " + req.email() + " not found");
+          HttpStatus.NOT_FOUND, USER_WITH_EMAIL.getValue() + req.email() + NOT_FOUND.getValue());
     }
   }
 
@@ -286,7 +290,8 @@ public class UserService {
     try {
       return userResource.toRepresentation();
     } catch (NotFoundException e) {
-      throw new UserServiceException(HttpStatus.NOT_FOUND, "User with id: " + id + " not found");
+      throw new UserServiceException(HttpStatus.NOT_FOUND,
+          USER_WITH_ID.getValue() + id + NOT_FOUND.getValue());
     }
   }
 }
