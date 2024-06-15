@@ -1,5 +1,6 @@
 package ru.gnivc.common.validator;
 
+import static ru.gnivc.common.constants.StringConstants.X_SERVICE_NAME;
 import static ru.gnivc.common.role.KeycloakRealmRoles.ADMIN;
 import static ru.gnivc.common.role.KeycloakRealmRoles.DRIVER;
 import static ru.gnivc.common.role.KeycloakRealmRoles.LOGIST;
@@ -32,9 +33,9 @@ public class PermissionValidator {
     Jwt principal = getCurrentPrincipal();
     final Optional<KeycloakRealmRoles> role = RoleExtractor.findInAttributes(principal, companyId);
     final Optional<HttpServletRequest> request = getCurrentHttpRequest();
-    if (request.isPresent() && request.get().getHeader("X-Service-name") != null) {
+    if (request.isPresent() && request.get().getHeader(X_SERVICE_NAME.getValue()) != null) {
       for (ServiceNames service : set.services()) {
-        if (service.name().equals(request.get().getHeader("X-Service-name"))) {
+        if (service.name().equals(request.get().getHeader(X_SERVICE_NAME.getValue()))) {
           return true;
         }
       }
@@ -44,9 +45,9 @@ public class PermissionValidator {
 
   public boolean isLogistService() {
     final Optional<HttpServletRequest> request = getCurrentHttpRequest();
-    if (request.isPresent() && request.get().getHeader("X-Service-name") != null) {
+    if (request.isPresent() && request.get().getHeader(X_SERVICE_NAME.getValue()) != null) {
       return ServiceNames.LOGIST_SERVICE.name().equals(
-          request.get().getHeader("X-Service-name"));
+          request.get().getHeader(X_SERVICE_NAME.getValue()));
     }
     return false;
   }
