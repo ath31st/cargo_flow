@@ -21,11 +21,6 @@ public class TokenInterceptor implements ClientHttpRequestInterceptor {
     return execution.execute(request, body);
   }
 
-  private String getTokenz() {
-    Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    return jwt != null ? jwt.getTokenValue() : null;
-  }
-
   public static String getToken() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null) {
