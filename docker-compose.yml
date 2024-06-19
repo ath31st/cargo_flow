@@ -82,6 +82,7 @@ services:
       - "5432:5432"
     command: -p 5432
     environment:
+      TZ: "Europe/Moscow"
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: cargo_flow_db
